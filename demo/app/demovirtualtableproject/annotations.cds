@@ -1,0 +1,1 @@
+using CatlogService as service from '../../srv/product_service';
