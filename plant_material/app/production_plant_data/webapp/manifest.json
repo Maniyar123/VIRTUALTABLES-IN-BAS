@@ -1,0 +1,124 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "com.productionplantdata",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.17.0",
+      "toolsId": "18945232-1aeb-4960-915f-3fb68431b66d"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/v2/odata/v4/catlog-service1/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.134.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+       
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.productionplantdata.i18n.i18n"
+        }
+      },
+      "plantV2Model": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "globalModel": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": {
+         
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "com.productionplantdata.view",
+        "async": true,
+        "viewPath": "com.productionplantdata.view"
+      },
+      "routes": [
+        {
+          "name": "RoutemasterView",
+          "pattern": "",
+          "target": [
+            "TargetmasterView"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetmasterView": {
+          "id": "masterView",
+          "name": "masterView"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "com.productionplantdata.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

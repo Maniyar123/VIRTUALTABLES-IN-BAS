@@ -2,10 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run demo-1",
+      "name": "Run plant_material-1",
       "request": "launch",
       "type": "node",
-      "cwd": "${workspaceFolder}/demo",
+      "cwd": "${workspaceFolder}/plant_material",
       "runtimeExecutable": "cds",
       "args": [
         "serve",
@@ -16,10 +16,10 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "envFile": "${workspaceFolder}/demo/.env1",
+      "envFile": "${workspaceFolder}/plant_material/.env1",
       "env": {
         "NODE_ENV": "development",
-        "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/demo\\\",\\\"profileName\\\":\\\"development\\\"}\"}"
+        "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/plant_material\\\",\\\"profileName\\\":\\\"development\\\"}\"}"
       }
     }
   ]

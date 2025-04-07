@@ -1,0 +1,142 @@
+<mvc:View controllerName="com.productionplantdata.controller.DetailView"
+      xmlns="sap.uxap"
+      xmlns:mvc="sap.ui.core.mvc"
+      xmlns:m="sap.m"
+      xmlns:f="sap.f"
+      xmlns:form="sap.ui.layout.form" height="100%" displayBlock="true">
+
+    <ObjectPageLayout id="ObjectPageLayout"
+                     showTitleInHeaderContent="true"
+                     alwaysShowContentHeader="false"
+                     preserveHeaderStateOnScroll="false"
+                     headerContentPinnable="true"
+                     isChildPage="true"
+                     upperCaseAnchorBar="false">
+
+        <headerTitle>
+            <ObjectPageDynamicHeaderTitle>
+                <expandedHeading>
+                    <m:Title text="{PlantDetails>/PLANTNAME}" wrapping="true" class="sapUiSmallMarginEnd"/>
+                </expandedHeading>
+
+                <snappedHeading>
+                    <m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Center">
+                        <m:FlexBox wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
+                            <m:Title text="{PlantDetails>/PLANTNAME}" wrapping="true" class="sapUiTinyMarginEnd"/>
+                        </m:FlexBox>
+                    </m:FlexBox>
+                </snappedHeading>
+
+                <navigationActions>
+                   
+                    <m:OverflowToolbarButton type="Transparent" icon="sap-icon://decline" press="handleClose"  tooltip="Close middle column" visible="{= ${/actionButtonsInfo/endColumn/closeColumn} !== null }" />
+                </navigationActions>
+            </ObjectPageDynamicHeaderTitle>
+        </headerTitle>
+
+        <headerContent>
+            <m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch">
+                <f:Avatar src="../../../../../../../{products>ProductPicUrl}"
+                          displaySize="L"
+                          displayShape="Square"
+                          class="sapUiTinyMarginEnd">
+                </f:Avatar>
+                <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                    <m:Label text="Description"/>
+                    <m:Text text="{PlantDetails>/MOSTSELLING}"/>
+                </m:VBox>
+                <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                    <m:Label text="SalesHead"/>
+                    <m:Text text="{PlantDetails>/SALESHEAD}"/>
+                </m:VBox>
+                <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                    <m:Label text="Email"/>
+                    <m:Text text="{PlantDetails>/EMAIL}"/>
+                </m:VBox>
+                <m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                    <m:Label text="Contact"/>
+                    <m:Text text="{PlantDetails>/CONTACTNUM}"/>
+                </m:VBox>
+            </m:FlexBox>
+        </headerContent>
+
+        <sections>
+            <ObjectPageSection title="Plant Information">
+                <subSections>
+                    <ObjectPageSubSection>
+                        <blocks>
+                            <form:SimpleForm
+                                maxContainerCols="2"
+                                editable="false"
+                                layout="ResponsiveGridLayout"
+                                labelSpanL="5"
+                                labelSpanM="5"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                columnsL="1"
+                                columnsM="1">
+                                <form:content>
+                                
+                                    <m:Label text="Plant ID"/>
+                                    <m:Text text="{PlantDetails>/PU_ID}"/>
+                                    <m:Label text="Description"/>
+                                    <m:Text text="{PlantDetails>/PLANTDESCR}"/>
+                                    <m:Label text="Country"/>
+                                    <m:Text text="{PlantDetails>/C_NAME}"/>
+                                     <m:Label text="StateName"/>
+                                    <m:Text text="{PlantDetails>/S_NAME}"/>
+                                     <m:Label text="MostSelling"/>
+                                    <m:Text text="{PlantDetails>/MOSTSELLING}"/>
+                                     <m:Label text="LowestSelling"/>
+                                    <m:Text text="{PlantDetails>/LOWESTSELLING}"/>
+                                     <m:Label text="MonthlyTurnOver"/>
+                                    <m:Text text="{PlantDetails>/MONTHLYTURNOVER}"/>
+                                     <m:Label text="EstablishedYear"/>
+                                    <m:Text text="{PlantDetails>/ESTABLISHEDYEAR}"/>
+                                     <m:Label text="TotalEmployee"/>
+                                    <m:Text text="{PlantDetails>/TOTALEMPLOYEES}"/>
+                                     <m:Label text="Capacity"/>
+                                    <m:Text text="{PlantDetails>/CAPACITY}"/>
+                                    <m:Label text="AreaSize"/>
+                                    <m:Text text="{PlantDetails>/AREASIZE}"/>
+                                    <m:Label text="Address"/>
+                                    <m:Text text="{PlantDetails>/ADDRESS}"/>
+                                    <m:Label text="Email"/>
+                                    <m:Text text="{PlantDetails>/EMAIL}"/>
+                                
+                                </form:content>
+                            </form:SimpleForm>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+            </ObjectPageSection>
+
+            <ObjectPageSection title="Material Information">
+                <subSections>
+                    <ObjectPageSubSection>
+                        <blocks>
+                            <m:Table
+                                id="materialsTable"
+                                mode="SingleSelectMaster"
+                                items="{MaterialDetails>/Materials}"
+                                 itemPress="onDetailPressRow">
+                                <m:columns>
+                                    <m:Column>
+                                        <m:Text text="Branches"/>
+                                    </m:Column>
+                                </m:columns>
+                                <m:items>
+                                    <m:ColumnListItem type="Navigation">
+                                        <m:cells>
+                                            <m:ObjectIdentifier text="{MaterialDetails>B_Name}" />
+                                        </m:cells>
+                                    </m:ColumnListItem>
+                                </m:items>
+                            </m:Table>
+                        </blocks>
+                    </ObjectPageSubSection>
+                </subSections>
+            </ObjectPageSection>
+        </sections>
+    </ObjectPageLayout>
+</mvc:View>

@@ -18,6 +18,24 @@
       "problemMatcher": [
         "$cap-hdi-bind-handler"
       ]
+    },
+    {
+      "label": "cds-deploy-to-hana-plant_material-plant_material-hdiplant_mateV29vbma1vQBjNkA2zhk9kQ",
+      "type": "shell",
+      "command": "cds",
+      "args": [
+        "deploy",
+        "--to",
+        "hana:plant_material-hdiplant_mateV29vbma1vQBjNkA2zhk9kQ",
+        "--no-save"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/plant_material"
+      },
+      "isBackground": true,
+      "problemMatcher": [
+        "$cap-hdi-bind-handler"
+      ]
     }
   ]
 }

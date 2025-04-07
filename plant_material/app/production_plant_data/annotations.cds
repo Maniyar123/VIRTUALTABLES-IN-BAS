@@ -1,0 +1,1 @@
+using CatlogService1 as service from '../../srv/plant_material_service';

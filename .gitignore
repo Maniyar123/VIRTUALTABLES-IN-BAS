@@ -3,3 +3,11 @@
 demo/db/.env
 # auto generated wildcard
 demo/.env1
+# auto generated wildcard
+plant_material/gen/db/.env
+# auto generated wildcard
+plant_material/.env1
+# auto generated wildcard
+plant_material/db/.env
+# added by cds
+.cdsrc-private.json

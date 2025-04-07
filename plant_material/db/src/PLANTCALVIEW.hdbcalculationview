@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="PLANTCALVIEW" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="PLANTCALVIEW"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="CATLOGSERVICE1_STATES">
+    <resourceUri>CATLOGSERVICE1_STATES</resourceUri>
+  </DataSource>
+  <DataSource id="CATLOGSERVICE1_PLANTS">
+    <resourceUri>CATLOGSERVICE1_PLANTS</resourceUri>
+  </DataSource>
+  <DataSource id="CATLOGSERVICE1_COUNTRIES">
+    <resourceUri>CATLOGSERVICE1_COUNTRIES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_1" cardinality="C1_N" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="CATLOGSERVICE1_COUNTRIES" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="S_ID"/>
+      <viewAttribute id="S_NAME"/>
+      <viewAttribute id="COUNTY_C_ID"/>
+      <viewAttribute id="PU_ID"/>
+      <viewAttribute id="PLANTNAME"/>
+      <viewAttribute id="PLANTDESCR"/>
+      <viewAttribute id="MOSTSELLING"/>
+      <viewAttribute id="LOWESTSELLING"/>
+      <viewAttribute id="MONTHLYTURNOVER"/>
+      <viewAttribute id="CONTACTNUM"/>
+      <viewAttribute id="SALESHEAD"/>
+      <viewAttribute id="ESTABLISHEDYEAR"/>
+      <viewAttribute id="TOTALEMPLOYEES"/>
+      <viewAttribute id="CAPACITY"/>
+      <viewAttribute id="AREASIZE"/>
+      <viewAttribute id="ADDRESS"/>
+      <viewAttribute id="OPERATIONALSTATUS"/>
+      <viewAttribute id="EMAIL"/>
+      <viewAttribute id="STATE_S_ID"/>
+      <viewAttribute hidden="true" id="JOIN$S_ID$STATE_S_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CATLOGSERVICE1_STATES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="S_ID" source="S_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="S_NAME" source="S_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTY_C_ID" source="COUNTY_C_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$S_ID$STATE_S_ID" source="S_ID"/>
+    </input>
+    <input node="CATLOGSERVICE1_PLANTS">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PU_ID" source="PU_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PLANTNAME" source="PLANTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PLANTDESCR" source="PLANTDESCR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MOSTSELLING" source="MOSTSELLING"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOWESTSELLING" source="LOWESTSELLING"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MONTHLYTURNOVER" source="MONTHLYTURNOVER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CONTACTNUM" source="CONTACTNUM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESHEAD" source="SALESHEAD"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ESTABLISHEDYEAR" source="ESTABLISHEDYEAR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALEMPLOYEES" source="TOTALEMPLOYEES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CAPACITY" source="CAPACITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AREASIZE" source="AREASIZE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ADDRESS" source="ADDRESS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OPERATIONALSTATUS" source="OPERATIONALSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EMAIL" source="EMAIL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATE_S_ID" source="STATE_S_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$S_ID$STATE_S_ID" source="STATE_S_ID"/>
+    </input>
+    <joinAttribute name="JOIN$S_ID$STATE_S_ID"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" cardinality="C1_N" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="CATLOGSERVICE1_COUNTRIES" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="S_ID"/>
+      <viewAttribute id="S_NAME"/>
+      <viewAttribute id="COUNTY_C_ID"/>
+      <viewAttribute id="PU_ID"/>
+      <viewAttribute id="PLANTNAME"/>
+      <viewAttribute id="PLANTDESCR"/>
+      <viewAttribute id="MOSTSELLING"/>
+      <viewAttribute id="LOWESTSELLING"/>
+      <viewAttribute id="MONTHLYTURNOVER"/>
+      <viewAttribute id="CONTACTNUM"/>
+      <viewAttribute id="SALESHEAD"/>
+      <viewAttribute id="ESTABLISHEDYEAR"/>
+      <viewAttribute id="TOTALEMPLOYEES"/>
+      <viewAttribute id="CAPACITY"/>
+      <viewAttribute id="AREASIZE"/>
+      <viewAttribute id="ADDRESS"/>
+      <viewAttribute id="OPERATIONALSTATUS"/>
+      <viewAttribute id="EMAIL"/>
+      <viewAttribute id="STATE_S_ID"/>
+      <viewAttribute id="C_ID"/>
+      <viewAttribute id="C_NAME"/>
+      <viewAttribute hidden="true" id="JOIN$C_ID$COUNTY_C_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CATLOGSERVICE1_COUNTRIES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="C_ID" source="C_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="C_NAME" source="C_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$C_ID$COUNTY_C_ID" source="C_ID"/>
+    </input>
+    <input node="Join_1_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="S_ID" source="S_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="S_NAME" source="S_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTY_C_ID" source="COUNTY_C_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PU_ID" source="PU_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PLANTNAME" source="PLANTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PLANTDESCR" source="PLANTDESCR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MOSTSELLING" source="MOSTSELLING"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOWESTSELLING" source="LOWESTSELLING"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MONTHLYTURNOVER" source="MONTHLYTURNOVER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CONTACTNUM" source="CONTACTNUM"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SALESHEAD" source="SALESHEAD"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ESTABLISHEDYEAR" source="ESTABLISHEDYEAR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALEMPLOYEES" source="TOTALEMPLOYEES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CAPACITY" source="CAPACITY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AREASIZE" source="AREASIZE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ADDRESS" source="ADDRESS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OPERATIONALSTATUS" source="OPERATIONALSTATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EMAIL" source="EMAIL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATE_S_ID" source="STATE_S_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$C_ID$COUNTY_C_ID" source="COUNTY_C_ID"/>
+    </input>
+    <joinAttribute name="JOIN$C_ID$COUNTY_C_ID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1_2">
+  <attributes>
+    <attribute id="S_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="S_ID"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="S_ID"/>
+    </attribute>
+    <attribute id="S_NAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="S_NAME"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="S_NAME"/>
+    </attribute>
+    <attribute id="COUNTY_C_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTY_C_ID"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="COUNTY_C_ID"/>
+    </attribute>
+    <attribute id="PU_ID" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PU_ID"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="PU_ID"/>
+    </attribute>
+    <attribute id="PLANTNAME" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PLANTNAME"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="PLANTNAME"/>
+    </attribute>
+    <attribute id="PLANTDESCR" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PLANTDESCR"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="PLANTDESCR"/>
+    </attribute>
+    <attribute id="MOSTSELLING" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MOSTSELLING"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="MOSTSELLING"/>
+    </attribute>
+    <attribute id="LOWESTSELLING" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LOWESTSELLING"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="LOWESTSELLING"/>
+    </attribute>
+    <attribute id="MONTHLYTURNOVER" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MONTHLYTURNOVER"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="MONTHLYTURNOVER"/>
+    </attribute>
+    <attribute id="CONTACTNUM" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CONTACTNUM"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="CONTACTNUM"/>
+    </attribute>
+    <attribute id="SALESHEAD" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SALESHEAD"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="SALESHEAD"/>
+    </attribute>
+    <attribute id="ESTABLISHEDYEAR" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ESTABLISHEDYEAR"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="ESTABLISHEDYEAR"/>
+    </attribute>
+    <attribute id="TOTALEMPLOYEES" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TOTALEMPLOYEES"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="TOTALEMPLOYEES"/>
+    </attribute>
+    <attribute id="CAPACITY" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CAPACITY"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="CAPACITY"/>
+    </attribute>
+    <attribute id="AREASIZE" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AREASIZE"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="AREASIZE"/>
+    </attribute>
+    <attribute id="ADDRESS" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ADDRESS"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="ADDRESS"/>
+    </attribute>
+    <attribute id="OPERATIONALSTATUS" order="17" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="OPERATIONALSTATUS"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="OPERATIONALSTATUS"/>
+    </attribute>
+    <attribute id="EMAIL" order="18" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EMAIL"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="EMAIL"/>
+    </attribute>
+    <attribute id="STATE_S_ID" order="19" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATE_S_ID"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="STATE_S_ID"/>
+    </attribute>
+    <attribute id="C_ID" order="20" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="C_ID"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="C_ID"/>
+    </attribute>
+    <attribute id="C_NAME" order="21" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="C_NAME"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="C_NAME"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="214"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="CATLOGSERVICE1_COUNTRIES" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="CATLOGSERVICE1_STATES" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="225"/>
+    </shape>
+    <shape modelObjectName="CATLOGSERVICE1_PLANTS" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="620" y="30"/>
+      <rectangleSize width="227"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

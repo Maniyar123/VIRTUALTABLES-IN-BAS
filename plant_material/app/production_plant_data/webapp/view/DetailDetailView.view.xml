@@ -1,0 +1,120 @@
+<mvc:View controllerName="com.productionplantdata.controller.DetailDetailView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    height="100%"
+    displayBlock="true" >
+
+    <Page title="Material Details">
+     <headerContent>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <OverflowToolbarButton type="Transparent"
+                    icon="sap-icon://decline"
+                    press="detailDetailHandleClose"
+                    tooltip="Close end column"
+                    visible="{= ${/actionButtonsInfo/endColumn/closeColumn} !== null }" />
+            </OverflowToolbar>
+        </headerContent>
+        <content>
+            <TabContainer items="{PlantDetails>/results}" class="sapUiResponsiveContentPadding" backgroundDesign="Standard">
+                <items>
+                    <TabContainerItem title="{PlantDetails>M_NAME}" additionalText="{PlantDetails>MATERIALTYPE}">
+                        <content>
+                            <f:Form editable="false">
+                                <f:title>
+                                    <core:Title text="Material Information" />
+                                </f:title>
+                                <f:layout>
+                                    <f:ResponsiveGridLayout/>
+                                </f:layout>
+                                <f:FormContainer>
+                                 <f:FormElement label="Branch ID">
+                                        <f:fields><Text text="{PlantDetails>B_ID}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Branch Name">
+                                        <f:fields><Text text="{PlantDetails>B_NAME}" /></f:fields>
+                                    </f:FormElement>
+                                    
+                                    <f:FormElement label="Material ID">
+                                        <f:fields><Text text="{PlantDetails>M_ID}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Material Name">
+                                        <f:fields><Text text="{PlantDetails>M_NAME}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Material Type">
+                                        <f:fields><Text text="{PlantDetails>MATERIALTYPE}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Capacity">
+                                        <f:fields><Text text="{PlantDetails>M_CAPACITY}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Description">
+                                        <f:fields><Text text="{PlantDetails>M_DESC}" /></f:fields>
+                                    </f:FormElement>
+                                </f:FormContainer>
+
+                                <f:FormContainer>
+                                    <f:FormElement label="Price">
+                                        <f:fields><Text text="{PlantDetails>M_PRICE} USD" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Quantity">
+                                        <f:fields><Text text="{PlantDetails>M_QUANTITY}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Warranty Period">
+                                        <f:fields><Text text="{PlantDetails>WARRANTYPERIOD} months" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Weight">
+                                        <f:fields><Text text="{PlantDetails>WEIGHT} kg" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Plant PU ID">
+                                        <f:fields><Text text="{PlantDetails>PLANT_PU_ID}" /></f:fields>
+                                    </f:FormElement>
+                                </f:FormContainer>
+
+                                <f:FormContainer>
+                                    <f:FormElement label="Storage Condition">
+                                        <f:fields><Text text="{PlantDetails>STORAGECONDITION}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Supplier">
+                                        <f:fields><Text text="{PlantDetails>SUPPLIER}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Manufacturer">
+                                        <f:fields><Text text="{PlantDetails>MANUFACTURER}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Cost Management">
+                                        <f:fields><Text text="{PlantDetails>COSTMANAGEMENT}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Material Status">
+                                        <f:fields><Text text="{PlantDetails>MATERIALSTATUS}" /></f:fields>
+                                    </f:FormElement>
+                                </f:FormContainer>
+
+                                <f:FormContainer>
+                                    <f:FormElement label="Selling Point">
+                                        <f:fields><Text text="{PlantDetails>SELLINGPOINT}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Usage">
+                                        <f:fields><Text text="{PlantDetails>USAGE}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Recyclable">
+                                        <f:fields>
+                                            <Text text="{= ${PlantDetails>RECYCLABLE} ? 'Yes' : 'No'}" />
+                                        </f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Production Date">
+                                        <f:fields><Text text="{PlantDetails>PRODUCTIONDATE}" /></f:fields>
+                                    </f:FormElement>
+                                    <f:FormElement label="Expiry Date">
+                                        <f:fields><Text text="{PlantDetails>EXPIRYDATE}" /></f:fields>
+                                    </f:FormElement>
+                                </f:FormContainer>
+                            </f:Form>
+                        </content>
+                    </TabContainerItem>
+                </items>
+            </TabContainer>
+        </content>
+    </Page>
+
+</mvc:View>

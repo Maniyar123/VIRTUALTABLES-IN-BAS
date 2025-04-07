@@ -1,0 +1,103 @@
+<mvc:View controllerName="com.productionplantdata.controller.masterView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    displayBlock="true" 
+    height="100%">
+
+    <f:DynamicPage id="dynamicPage" title="{i18n>title}">
+        
+        <!-- Dynamic Page Title -->
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="Production Plant Data" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- Dynamic Page Header -->
+        <f:header>
+            <f:DynamicPageHeader>
+                <Toolbar  class="productToolbar">
+                    <!-- <SearchField id="searchField" placeholder="Search Plants..." liveChange="onSearch" width="25%" /> -->
+                    <Input
+                    
+                        id="plantSearchInput"
+                        placeholder="Search by Plant Unique ID"
+                        showValueHelp="true"
+                        valueHelpRequest="onPlantValueHelp"
+                         value="{/selectedPlant/PU_ID}"
+                        width="25%" 
+                        change="onPlantInputChange"/>
+
+                    <!-- Country Value Help -->
+                    <Label text="Country:" />
+                    <Input id="countryInput"   value="{/selectedCountry/C_NAME}" showValueHelp="true" valueHelpRequest="onCountryValueHelp"   change="onCountryInputChange" width="25%"/>
+
+                    <!-- State Value Help -->
+                    <Label text="State:" />
+                    <Input id="stateInput"  value="{/selectedState/S_NAME}" showValueHelp="true" valueHelpRequest="onStateValueHelp"  change="onStateInputChange" width="25%"/>
+
+                    <ToolbarSpacer/>
+
+                    <!-- Create Button -->
+                    <Button text="Create" press="onCreate" icon="sap-icon://add"/>
+                </Toolbar>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!-- Dynamic Page Content -->
+        <f:content>
+            <Table id="plantTable"  items="{PlantData>/results}"  width="100%" >
+                <columns>
+                    <Column>
+                        <Text text="Plant Id" />
+                    </Column>
+                    <Column>
+                        <Text text="Plant Name" />
+                    </Column>
+                    <Column>
+                        <Text text="Description" />
+                    </Column>
+                    <Column>
+                        <Text text="Operating Status" />
+                    </Column>
+                    <Column>
+                        <Text text="Country" />
+                    </Column>
+                    <Column>
+                        <Text text="State" />
+                    </Column>
+                    <!-- <Column>
+                        <Text text="Sales Head" />
+                    </Column> -->
+                    <Column width="15%" hAlign="Center" >
+                        <Text text="Actions" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press="onPressRow">
+                        <cells>
+                            <Text text="{PlantData>PU_ID}" />
+                            <Text text="{PlantData>PLANTNAME}" />
+                            <Text text="{PlantData>PLANTDESCR}" />
+                            <Switch state="{PlantData>OPERATIONALSTATUS}" change="onSwitchChange" />
+                            <Text text="{PlantData>C_NAME}" />
+                            <Text text="{PlantData>S_NAME}" />
+                            <!-- <Text text="{PlantData>SALESHEAD}" /> -->
+                            
+                            <!-- Update and Delete Icons -->
+                            <HBox justifyContent="Center" alignItems="Center">
+                                 <Button icon="sap-icon://edit" press="onEditProductListView" type="Success" class="sapUiTinyMarginEnd" />
+                                 <Button icon="sap-icon://delete" press="onDeleteProductListView" type="Reject"  />
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+
+    </f:DynamicPage>
+
+</mvc:View>

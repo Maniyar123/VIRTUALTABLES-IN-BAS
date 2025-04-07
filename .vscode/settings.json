@@ -1,5 +1,6 @@
 {
     "SAP HANA Database Explorer.ShowXsAdvancedConnections": true,
-    "SAP HANA Database Artifacts.lastSelectedTargetPath": "/home/user/projects/demo/db/src",
-    "SAP HANA Project Explorer.bind.confirm automatic undeployment": false
+    "SAP HANA Database Artifacts.lastSelectedTargetPath": "/home/user/projects/plant_material/db/src",
+    "SAP HANA Project Explorer.bind.confirm automatic undeployment": false,
+    "SAP HANA Database Explorer.UseObjectsDefinitionForSqlGeneration.RetentionTime": 7
 }

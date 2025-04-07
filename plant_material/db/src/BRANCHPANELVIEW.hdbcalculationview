@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="BRANCHPANELVIEW" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" mdsCubeConversionExecution="AT_LOADING_TIME">
+<descriptions defaultDescription="BRANCHPANELVIEW"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="BRANCHMATERIALCALVIEW">
+    <resourceUri>BRANCHMATERIALCALVIEW</resourceUri>
+  </DataSource>
+  <DataSource id="PLANTCALVIEW">
+    <resourceUri>PLANTCALVIEW</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_N" joinType="fullOuter">
+    <viewAttributes>
+      <viewAttribute id="B_ID"/>
+      <viewAttribute id="B_NAME"/>
+      <viewAttribute id="M_ID"/>
+      <viewAttribute id="M_NAME"/>
+      <viewAttribute id="S_ID"/>
+      <viewAttribute id="S_NAME"/>
+      <viewAttribute id="C_ID"/>
+      <viewAttribute id="C_NAME"/>
+      <viewAttribute id="PLANTNAME"/>
+      <viewAttribute id="PU_ID"/>
+      <viewAttribute hidden="true" id="JOIN$PLANT_PU_ID$PU_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="BRANCHMATERIALCALVIEW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="B_ID" source="B_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="B_NAME" source="B_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="M_ID" source="M_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="M_NAME" source="M_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PLANT_PU_ID$PU_ID" source="PLANT_PU_ID"/>
+    </input>
+    <input node="PLANTCALVIEW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="S_ID" source="S_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="S_NAME" source="S_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="C_ID" source="C_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="C_NAME" source="C_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PLANTNAME" source="PLANTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PU_ID" source="PU_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PLANT_PU_ID$PU_ID" source="PU_ID"/>
+    </input>
+    <joinAttribute name="JOIN$PLANT_PU_ID$PU_ID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="B_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="B_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="B_ID"/>
+    </attribute>
+    <attribute id="B_NAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="B_NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="B_NAME"/>
+    </attribute>
+    <attribute id="M_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="M_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="M_ID"/>
+    </attribute>
+    <attribute id="M_NAME" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="M_NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="M_NAME"/>
+    </attribute>
+    <attribute id="S_ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="S_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="S_ID"/>
+    </attribute>
+    <attribute id="S_NAME" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="S_NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="S_NAME"/>
+    </attribute>
+    <attribute id="C_ID" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="C_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="C_ID"/>
+    </attribute>
+    <attribute id="C_NAME" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="C_NAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="C_NAME"/>
+    </attribute>
+    <attribute id="PLANTNAME" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PLANTNAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="PLANTNAME"/>
+    </attribute>
+    <attribute id="PU_ID" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PU_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="PU_ID"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="111" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="BRANCHMATERIALCALVIEW" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="721" y="-1"/>
+      <rectangleSize width="231.537109375"/>
+    </shape>
+    <shape modelObjectName="PLANTCALVIEW" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="295" y="24"/>
+      <rectangleSize width="205.1845703125"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

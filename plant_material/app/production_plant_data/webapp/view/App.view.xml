@@ -1,0 +1,14 @@
+<mvc:View controllerName="com.productionplantdata.controller.App"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.f" height="100%">
+    <FlexibleColumnLayout 
+        id="fcl"
+        
+        >
+        <beginColumnPages>
+            <mvc:XMLView id="beginView" async="true" viewName="com.productionplantdata.view.masterView" />
+        </beginColumnPages>
+
+        </FlexibleColumnLayout>
+</mvc:View>

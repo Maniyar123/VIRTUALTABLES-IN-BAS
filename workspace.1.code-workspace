@@ -1,0 +1,10 @@
+{
+    "folders": [
+        {
+            "path": "plant_material"
+        }
+    ],
+    "settings": {
+        "SAP HANA Database Explorer.ShowXsAdvancedConnections": true
+    }
+}

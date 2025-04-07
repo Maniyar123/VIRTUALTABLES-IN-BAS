@@ -1,0 +1,44 @@
+ <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" >
+ 
+    <VBox class="sapUiMediumMargin">
+        <!-- Title and Add Button -->
+        <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+            <!-- Title for the table -->
+            <Title text="Branches Table" level="H1" />
+            
+            <!-- Add Button (Plus Icon) -->
+            <Button 
+                icon="sap-icon://add" 
+                type="Transparent" 
+                press="onAddBranches" 
+                tooltip="Add New Branch" />
+        </HBox>
+
+        <!-- Table for Branch data -->
+        <Table id="branchTable" inset="false"  items="{/CHARACTERISTICS_DATA}" >
+            <columns>
+                <!-- Branch Id Column -->
+                <Column>
+                    <Text text="Branch Id" id="branchId"/>
+                </Column>
+
+                <!-- Branch Name Column -->
+                <Column>
+                    <Text text="Branch Name" id="branchName"/>
+                </Column>
+            </columns>
+
+            <items>
+                <ColumnListItem>
+                    <cells>
+                       <!-- Bind the Branch Id -->
+                        <Text text="{B_ID}" />
+
+                        <!-- Bind the Brach name (show the first selected value in this example) -->
+                        <Text text="{B_Name}"/>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </VBox>
+</core:FragmentDefinition>
