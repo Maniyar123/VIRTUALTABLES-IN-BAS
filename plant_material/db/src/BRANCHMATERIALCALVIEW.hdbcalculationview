@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="BRANCHMATERIALCALVIEW" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="BRANCHMATERIALCALVIEW" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
 <descriptions defaultDescription="BRANCHMATERIALCALVIEW"/>
 <localVariables/>
 <variableMappings/>
@@ -10,28 +10,26 @@
   <DataSource id="CATLOGSERVICE1_MATERIALS">
     <resourceUri>CATLOGSERVICE1_MATERIALS</resourceUri>
   </DataSource>
-  <DataSource id="CATLOGSERVICE1_BRANCHES">
-    <resourceUri>CATLOGSERVICE1_BRANCHES</resourceUri>
+  <DataSource id="BRANCHPLANTCALVIEW">
+    <resourceUri>BRANCHPLANTCALVIEW</resourceUri>
   </DataSource>
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1_1" cardinality="C1_N" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="CATLOGSERVICE1_BRANCHES" multiJoinOrder="Outside In">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_1" cardinality="C1_N" joinType="fullOuter" multiJoinNode="Join_1" multiJoinCentralTable="BRANCHPLANTCALVIEW" multiJoinOrder="Outside In">
     <viewAttributes>
-      <viewAttribute id="BRANCH_B_ID"/>
-      <viewAttribute id="MATERIAL_M_ID"/>
       <viewAttribute id="M_ID"/>
       <viewAttribute id="M_NAME"/>
       <viewAttribute id="M_DESC"/>
-      <viewAttribute id="M_PRICE" aggregationType="sum"/>
-      <viewAttribute id="M_QUANTITY" aggregationType="sum"/>
-      <viewAttribute id="M_CAPACITY" aggregationType="sum"/>
+      <viewAttribute id="M_PRICE"/>
+      <viewAttribute id="M_QUANTITY"/>
+      <viewAttribute id="M_CAPACITY"/>
       <viewAttribute id="SELLINGPOINT"/>
       <viewAttribute id="COSTMANAGEMENT"/>
       <viewAttribute id="MATERIALSTATUS"/>
       <viewAttribute id="MANUFACTURER"/>
-      <viewAttribute id="WARRANTYPERIOD" aggregationType="sum"/>
-      <viewAttribute id="WEIGHT" aggregationType="sum"/>
+      <viewAttribute id="WARRANTYPERIOD"/>
+      <viewAttribute id="WEIGHT"/>
       <viewAttribute id="PRODUCTIONDATE"/>
       <viewAttribute id="EXPIRYDATE"/>
       <viewAttribute id="STORAGECONDITION"/>
@@ -39,12 +37,12 @@
       <viewAttribute id="RECYCLABLE"/>
       <viewAttribute id="USAGE"/>
       <viewAttribute id="SUPPLIER"/>
+      <viewAttribute id="BRANCH_B_ID"/>
       <viewAttribute hidden="true" id="JOIN$MATERIAL_M_ID$M_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="CATLOGSERVICE1_BRANCHMATERIAL">
       <mapping xsi:type="Calculation:AttributeMapping" target="BRANCH_B_ID" source="BRANCH_B_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIAL_M_ID" source="MATERIAL_M_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$MATERIAL_M_ID$M_ID" source="MATERIAL_M_ID"/>
     </input>
     <input node="CATLOGSERVICE1_MATERIALS">
@@ -71,22 +69,20 @@
     </input>
     <joinAttribute name="JOIN$MATERIAL_M_ID$M_ID"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" cardinality="C1_N" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="CATLOGSERVICE1_BRANCHES" multiJoinOrder="Outside In">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" cardinality="C1_N" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="BRANCHPLANTCALVIEW" multiJoinOrder="Outside In">
     <viewAttributes>
-      <viewAttribute id="BRANCH_B_ID"/>
-      <viewAttribute id="MATERIAL_M_ID"/>
       <viewAttribute id="M_ID"/>
       <viewAttribute id="M_NAME"/>
       <viewAttribute id="M_DESC"/>
-      <viewAttribute id="M_PRICE" aggregationType="sum"/>
-      <viewAttribute id="M_QUANTITY" aggregationType="sum"/>
-      <viewAttribute id="M_CAPACITY" aggregationType="sum"/>
+      <viewAttribute id="M_PRICE"/>
+      <viewAttribute id="M_QUANTITY"/>
+      <viewAttribute id="M_CAPACITY"/>
       <viewAttribute id="SELLINGPOINT"/>
       <viewAttribute id="COSTMANAGEMENT"/>
       <viewAttribute id="MATERIALSTATUS"/>
       <viewAttribute id="MANUFACTURER"/>
-      <viewAttribute id="WARRANTYPERIOD" aggregationType="sum"/>
-      <viewAttribute id="WEIGHT" aggregationType="sum"/>
+      <viewAttribute id="WARRANTYPERIOD"/>
+      <viewAttribute id="WEIGHT"/>
       <viewAttribute id="PRODUCTIONDATE"/>
       <viewAttribute id="EXPIRYDATE"/>
       <viewAttribute id="STORAGECONDITION"/>
@@ -94,21 +90,20 @@
       <viewAttribute id="RECYCLABLE"/>
       <viewAttribute id="USAGE"/>
       <viewAttribute id="SUPPLIER"/>
+      <viewAttribute id="BRANCH_B_ID"/>
       <viewAttribute id="B_ID"/>
       <viewAttribute id="B_NAME"/>
-      <viewAttribute id="PLANT_PU_ID" aggregationType="sum"/>
+      <viewAttribute id="PLANT_PU_ID"/>
       <viewAttribute hidden="true" id="JOIN$B_ID$BRANCH_B_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="CATLOGSERVICE1_BRANCHES">
+    <input node="BRANCHPLANTCALVIEW">
       <mapping xsi:type="Calculation:AttributeMapping" target="B_ID" source="B_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="B_NAME" source="B_NAME"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PLANT_PU_ID" source="PLANT_PU_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$B_ID$BRANCH_B_ID" source="B_ID"/>
     </input>
     <input node="Join_1_1">
-      <mapping xsi:type="Calculation:AttributeMapping" target="BRANCH_B_ID" source="BRANCH_B_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="MATERIAL_M_ID" source="MATERIAL_M_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="M_ID" source="M_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="M_NAME" source="M_NAME"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="M_DESC" source="M_DESC"/>
@@ -128,6 +123,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="RECYCLABLE" source="RECYCLABLE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="USAGE" source="USAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="SUPPLIER" source="SUPPLIER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BRANCH_B_ID" source="BRANCH_B_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$B_ID$BRANCH_B_ID" source="BRANCH_B_ID"/>
     </input>
     <joinAttribute name="JOIN$B_ID$BRANCH_B_ID"/>
@@ -144,107 +140,91 @@
       <descriptions defaultDescription="B_NAME"/>
       <keyMapping columnObjectName="Join_1_2" columnName="B_NAME"/>
     </attribute>
-    <attribute id="BRANCH_B_ID" order="4" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="BRANCH_B_ID"/>
-      <keyMapping columnObjectName="Join_1_2" columnName="BRANCH_B_ID"/>
+    <attribute id="PLANT_PU_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PLANT_PU_ID"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="PLANT_PU_ID"/>
     </attribute>
-    <attribute id="MATERIAL_M_ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="MATERIAL_M_ID"/>
-      <keyMapping columnObjectName="Join_1_2" columnName="MATERIAL_M_ID"/>
-    </attribute>
-    <attribute id="M_ID" order="6" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="M_ID" order="4" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="M_ID"/>
       <keyMapping columnObjectName="Join_1_2" columnName="M_ID"/>
     </attribute>
-    <attribute id="M_NAME" order="7" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="M_NAME" order="5" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="M_NAME"/>
       <keyMapping columnObjectName="Join_1_2" columnName="M_NAME"/>
     </attribute>
-    <attribute id="M_DESC" order="8" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="M_DESC" order="6" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="M_DESC"/>
       <keyMapping columnObjectName="Join_1_2" columnName="M_DESC"/>
     </attribute>
-    <attribute id="SELLINGPOINT" order="12" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="M_PRICE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="M_PRICE"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="M_PRICE"/>
+    </attribute>
+    <attribute id="M_QUANTITY" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="M_QUANTITY"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="M_QUANTITY"/>
+    </attribute>
+    <attribute id="M_CAPACITY" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="M_CAPACITY"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="M_CAPACITY"/>
+    </attribute>
+    <attribute id="SELLINGPOINT" order="10" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="SELLINGPOINT"/>
       <keyMapping columnObjectName="Join_1_2" columnName="SELLINGPOINT"/>
     </attribute>
-    <attribute id="COSTMANAGEMENT" order="13" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="COSTMANAGEMENT" order="11" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="COSTMANAGEMENT"/>
       <keyMapping columnObjectName="Join_1_2" columnName="COSTMANAGEMENT"/>
     </attribute>
-    <attribute id="MATERIALSTATUS" order="14" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="MATERIALSTATUS" order="12" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="MATERIALSTATUS"/>
       <keyMapping columnObjectName="Join_1_2" columnName="MATERIALSTATUS"/>
     </attribute>
-    <attribute id="MANUFACTURER" order="15" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="MANUFACTURER" order="13" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="MANUFACTURER"/>
       <keyMapping columnObjectName="Join_1_2" columnName="MANUFACTURER"/>
     </attribute>
-    <attribute id="PRODUCTIONDATE" order="18" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="WARRANTYPERIOD" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WARRANTYPERIOD"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="WARRANTYPERIOD"/>
+    </attribute>
+    <attribute id="WEIGHT" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WEIGHT"/>
+      <keyMapping columnObjectName="Join_1_2" columnName="WEIGHT"/>
+    </attribute>
+    <attribute id="PRODUCTIONDATE" order="16" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="PRODUCTIONDATE"/>
       <keyMapping columnObjectName="Join_1_2" columnName="PRODUCTIONDATE"/>
     </attribute>
-    <attribute id="EXPIRYDATE" order="19" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="EXPIRYDATE" order="17" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="EXPIRYDATE"/>
       <keyMapping columnObjectName="Join_1_2" columnName="EXPIRYDATE"/>
     </attribute>
-    <attribute id="STORAGECONDITION" order="20" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="STORAGECONDITION" order="18" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="STORAGECONDITION"/>
       <keyMapping columnObjectName="Join_1_2" columnName="STORAGECONDITION"/>
     </attribute>
-    <attribute id="MATERIALTYPE" order="21" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="MATERIALTYPE" order="19" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="MATERIALTYPE"/>
       <keyMapping columnObjectName="Join_1_2" columnName="MATERIALTYPE"/>
     </attribute>
-    <attribute id="RECYCLABLE" order="22" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="RECYCLABLE" order="20" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="RECYCLABLE"/>
       <keyMapping columnObjectName="Join_1_2" columnName="RECYCLABLE"/>
     </attribute>
-    <attribute id="USAGE" order="23" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="USAGE" order="21" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="USAGE"/>
       <keyMapping columnObjectName="Join_1_2" columnName="USAGE"/>
     </attribute>
-    <attribute id="SUPPLIER" order="24" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="SUPPLIER" order="22" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="SUPPLIER"/>
       <keyMapping columnObjectName="Join_1_2" columnName="SUPPLIER"/>
     </attribute>
   </attributes>
   <calculatedAttributes/>
-  <baseMeasures>
-    <measure id="PLANT_PU_ID" order="3" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="PLANT_PU_ID"/>
-      <measureMapping columnObjectName="Join_1_2" columnName="PLANT_PU_ID"/>
-      <exceptionAggregationMetadata/>
-    </measure>
-    <measure id="M_PRICE" order="9" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="M_PRICE"/>
-      <measureMapping columnObjectName="Join_1_2" columnName="M_PRICE"/>
-      <exceptionAggregationMetadata/>
-    </measure>
-    <measure id="M_QUANTITY" order="10" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="M_QUANTITY"/>
-      <measureMapping columnObjectName="Join_1_2" columnName="M_QUANTITY"/>
-      <exceptionAggregationMetadata/>
-    </measure>
-    <measure id="M_CAPACITY" order="11" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="M_CAPACITY"/>
-      <measureMapping columnObjectName="Join_1_2" columnName="M_CAPACITY"/>
-      <exceptionAggregationMetadata/>
-    </measure>
-    <measure id="WARRANTYPERIOD" order="16" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="WARRANTYPERIOD"/>
-      <measureMapping columnObjectName="Join_1_2" columnName="WARRANTYPERIOD"/>
-      <exceptionAggregationMetadata/>
-    </measure>
-    <measure id="WEIGHT" order="17" aggregationType="sum" measureType="simple">
-      <descriptions defaultDescription="WEIGHT"/>
-      <measureMapping columnObjectName="Join_1_2" columnName="WEIGHT"/>
-      <exceptionAggregationMetadata/>
-    </measure>
-  </baseMeasures>
+  <baseMeasures/>
   <calculatedMeasures/>
   <restrictedMeasures/>
-  <localDimensions/>
 </logicalModel>
 <layout>
   <shapes>
@@ -254,19 +234,19 @@
     
   
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="100" y="186"/>
+      <upperLeftCorner x="95" y="192"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape modelObjectName="CATLOGSERVICE1_BRANCHES" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
-      <upperLeftCorner x="-70" y="30"/>
-      <rectangleSize width="247"/>
+    <shape modelObjectName="BRANCHPLANTCALVIEW" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
     </shape>
     <shape modelObjectName="CATLOGSERVICE1_BRANCHMATERIAL" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="292"/>
+      <rectangleSize width="250"/>
     </shape>
     <shape modelObjectName="CATLOGSERVICE1_MATERIALS" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
-      <upperLeftCorner x="797" y="1"/>
+      <upperLeftCorner x="747" y="-2"/>
       <rectangleSize width="248"/>
     </shape>
   </shapes>

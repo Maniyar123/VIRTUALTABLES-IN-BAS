@@ -43,9 +43,9 @@ sap.ui.define([
             });
         
             // Fetch Material Details
-            oPlantModel.read("/Branches", {
+            oPlantModel.read("/branchplantcalview", {
                 success: function (oData) {
-                    var filteredMaterials = oData.results.filter(item => item.plant_PU_ID === plantuniqueId);
+                    var filteredMaterials = oData.results.filter(item => item.PLANT_PU_ID === plantuniqueId);
                     if (filteredMaterials.length > 0) {
                         var oFilteredMaterialsModel = new JSONModel({ Materials: filteredMaterials });
                         console.log("Filtered Material Model Data:", oFilteredMaterialsModel.getData());
@@ -96,9 +96,9 @@ sap.ui.define([
             });
         
             // Fetch Material Details
-            oPlantModel.read("/Branches", {
+            oPlantModel.read("/branchplantcalview", {
                 success: function (oData) {
-                    var filteredMaterials = oData.results.filter(item => item.plant_PU_ID === plantuniqueId);
+                    var filteredMaterials = oData.results.filter(item => item.PLANT_PU_ID === plantuniqueId);
                     if (filteredMaterials.length > 0) {
                         var oFilteredMaterialsModel = new JSONModel({ Materials: filteredMaterials });
                         console.log("Filtered Material Model Data:", oFilteredMaterialsModel.getData());
@@ -136,7 +136,7 @@ sap.ui.define([
     
         // Get Branch and Plant Unique IDs
         var branchUniqueId = oContext.getProperty("B_ID"); // Branch ID
-        var plantUniqueId = oContext.getProperty("plant_PU_ID"); // Plant ID
+        var plantUniqueId = oContext.getProperty("PLANT_PU_ID"); // Plant ID
     
         // Now fetch and filter the characteristics data based on selected Branch and Plant
         this._fetchCharacteristicsData(branchUniqueId, plantUniqueId);
@@ -148,7 +148,7 @@ sap.ui.define([
         var oGModel = this.getOwnerComponent().getModel("globalModel"); // Global Model
     
         // Read data from the OData service
-        oModel.read("/Branches", {
+        oModel.read("/branchplantcalview", {
             success: function (oData) {
                 // Ensure the 'results' field exists and contains data
                 if (!oData || !oData.results) {
@@ -158,7 +158,7 @@ sap.ui.define([
     
                 // Filter results based on B_ID and PLANT_PU_ID
                 var filteredData = oData.results.filter(function (item) {
-                    return item.B_ID === branchUniqueId && item.plant_PU_ID === plantUniqueId;
+                    return item.B_ID === branchUniqueId && item.PLANT_PU_ID === plantUniqueId;
                 });
     
                 if (filteredData.length === 0) {

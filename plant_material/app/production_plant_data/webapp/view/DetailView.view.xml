@@ -128,7 +128,7 @@
                                 <m:items>
                                     <m:ColumnListItem type="Navigation">
                                         <m:cells>
-                                            <m:ObjectIdentifier text="{MaterialDetails>B_Name}" />
+                                            <m:ObjectIdentifier text="{MaterialDetails>B_NAME}" />
                                         </m:cells>
                                     </m:ColumnListItem>
                                 </m:items>

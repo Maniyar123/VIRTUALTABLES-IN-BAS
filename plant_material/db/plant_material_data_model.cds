@@ -1,5 +1,5 @@
 // namespace plant_material;
-context plant_material {
+ context plant_material {
   
 
 entity County {
@@ -33,15 +33,21 @@ entity Plant {
   operationalStatus: Boolean;  // Whether the plant is active or not
   email           : String;    // Email for business inquiries
   state       : Association to State;
-  branches    : Composition of many Branch on branches.plant = $self;
+  // branches    : Composition of many Branch on branches.plant = $self;
+  branchLinks      : Association to many BranchPlantLink on branchLinks.plant = $self;
 }
 
 entity Branch {
   key B_ID    : String;  // Unique Branch ID (e.g., "B001")
   B_Name      : String;
-  plant       : Association to Plant;
+  // plant       : Association to Plant;
   materials   : Composition of many BranchMaterial on materials.branch = $self;
 }
+entity BranchPlantLink {
+  key branch      : Association to Branch;
+  key plant       : Association to Plant;
+}
+
 
 entity Material {
  key M_ID          : String;   // Unique Material ID (e.g., "M001")
@@ -70,6 +76,16 @@ entity BranchMaterial {
   key material: Association to Material;
 }
 }
+
+
+
+@cds.persistence.exists
+@cds.persistence.table
+entity BRANCHPLANTCALVIEW{
+   key B_ID:String;
+   B_NAME:String;
+   PLANT_PU_ID:Integer;
+}
 @cds.persistence.exists
 @cds.persistence.table
 entity PLANTCALVIEW{
@@ -96,7 +112,7 @@ entity PLANTCALVIEW{
 @cds.persistence.exists
 @cds.persistence.table
 entity BRANCHMATERIALCALVIEW{
-  key B_ID:String;
+  B_ID:String;
   B_NAME:String;
   key M_ID:String;
   M_NAME:String;

@@ -2,7 +2,8 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/Fragment",
-], (Controller,JSONModel,Fragment) => {
+    "sap/m/MessageToast"
+], (Controller,JSONModel,Fragment,MessageToast) => {
     "use strict";
 
     return Controller.extend("com.productionplantdata.controller.masterView", {
@@ -574,25 +575,25 @@ sap.ui.define([
             
         },
       
-        onAddBranches:function(){
-          
-                if (!this.oFragment) {
-                    this.oFragment = sap.ui.xmlfragment("com.productionplantdata.fragments.SelectionPanelFragmnet", this);
-                    this.getView().addDependent(this.oFragment);
-                    this.oFragment.attachAfterOpen(this.loadData.bind(this));
-                }
-                this.oFragment.open();
+        onAddBranches: function () {
+            if (!this.oFragment) {
+                this.oFragment = sap.ui.xmlfragment("com.productionplantdata.fragments.SelectionPanelFragmnet", this);
+                this.getView().addDependent(this.oFragment);
+                this.oFragment.attachAfterOpen(this.loadData.bind(this));
+            }
+            this.oFragment.open();
         },
+        
         loadData: function () {
             var oModel = this.getOwnerComponent().getModel("plantV2Model");
             oModel.read("/branchpanelview", {
-               
                 success: this.onDataLoaded.bind(this),
                 error: function () {
                     MessageToast.show("Failed to load data");
                 }
             });
         },
+        
         onDataLoaded: function (oData) {
             const oVBox = sap.ui.getCore().byId("myVBox");
             if (!oVBox) {
@@ -609,6 +610,12 @@ sap.ui.define([
                     headerText: oCountry.C_NAME,
                     expandable: true,
                     expanded: false,
+                    customData: [
+                        new sap.ui.core.CustomData({
+                            key: "c_id",
+                            value: oCountry.C_ID
+                        })
+                    ],
                     expand: function (oCountryEvent) {
                         const oCountryPanel = oCountryEvent.getSource();
                         const isExpanded = oCountryEvent.getParameter("expand");
@@ -621,6 +628,12 @@ sap.ui.define([
                                     headerText: oState.S_NAME,
                                     expandable: true,
                                     expanded: false,
+                                    customData: [
+                                        new sap.ui.core.CustomData({
+                                            key: "s_id",
+                                            value: oState.S_ID
+                                        })
+                                    ],
                                     expand: function (oStateEvent) {
                                         const oStatePanel = oStateEvent.getSource();
                                         const isStateExpanded = oStateEvent.getParameter("expand");
@@ -630,9 +643,15 @@ sap.ui.define([
         
                                             oState.nodes.forEach(oPlant => {
                                                 const oPlantPanel = new sap.m.Panel({
-                                                    headerText: oPlant.plantName,
+                                                    headerText: oPlant.PLANTNAME,
                                                     expandable: true,
                                                     expanded: false,
+                                                    customData: [
+                                                        new sap.ui.core.CustomData({
+                                                            key: "pu_id",
+                                                            value: oPlant.PU_ID
+                                                        })
+                                                    ],
                                                     expand: function (oPlantEvent) {
                                                         const oPlantPanel = oPlantEvent.getSource();
                                                         const isPlantExpanded = oPlantEvent.getParameter("expand");
@@ -642,9 +661,14 @@ sap.ui.define([
         
                                                             oPlant.nodes.forEach(oBranch => {
                                                                 const oBranchPanel = new sap.m.Panel({
-                                                                    headerText: oBranch.B_Name,
+                                                                    headerText: oBranch.B_NAME,
                                                                     expandable: true,
-                                                                    expanded: false,
+                                                                    expanded: false,  customData: [
+                                                                        new sap.ui.core.CustomData({
+                                                                            key: "branchId",
+                                                                            value: oBranch.B_ID
+                                                                        })
+                                                                    ],
                                                                     expand: function (oBranchEvent) {
                                                                         const oBranchPanel = oBranchEvent.getSource();
                                                                         const isBranchExpanded = oBranchEvent.getParameter("expand");
@@ -654,12 +678,12 @@ sap.ui.define([
         
                                                                             oBranch.nodes.forEach(oMaterial => {
                                                                                 const oCheckbox = new sap.m.CheckBox({
-                                                                                    text: oMaterial.m_name,
+                                                                                    text: oMaterial.M_NAME,
                                                                                     selected: false,
                                                                                     customData: [
                                                                                         new sap.ui.core.CustomData({
                                                                                             key: "m_id",
-                                                                                            value: oMaterial.m_id
+                                                                                            value: oMaterial.M_ID
                                                                                         })
                                                                                     ]
                                                                                 });
@@ -698,17 +722,12 @@ sap.ui.define([
             this.oFragment.rerender();
         },
         
-        // Transform & filter raw data
         _transformData: function (aResults) {
             const oCountryMap = {};
         
             aResults.forEach(item => {
-                if (!item.C_ID || !item.C_NAME || !item.S_ID || !item.S_NAME ||
-                    !item.PLANT_ID || !item.plantName || !item.B_ID || !item.B_Name) {
-                    return; // skip incomplete records
-                }
+                if (!item.C_ID || !item.C_NAME) return;
         
-                // Country level
                 if (!oCountryMap[item.C_ID]) {
                     oCountryMap[item.C_ID] = {
                         C_ID: item.C_ID,
@@ -716,9 +735,11 @@ sap.ui.define([
                         nodes: []
                     };
                 }
+        
                 const oCountry = oCountryMap[item.C_ID];
         
-                // State level
+                if (!item.S_ID || !item.S_NAME) return;
+        
                 let oState = oCountry.nodes.find(s => s.S_ID === item.S_ID);
                 if (!oState) {
                     oState = {
@@ -729,39 +750,337 @@ sap.ui.define([
                     oCountry.nodes.push(oState);
                 }
         
-                // Plant level
-                let oPlant = oState.nodes.find(p => p.PLANT_ID === item.PLANT_ID);
+                if (!item.PU_ID || !item.PLANTNAME) return;
+        
+                let oPlant = oState.nodes.find(p => p.PU_ID === item.PU_ID);
                 if (!oPlant) {
                     oPlant = {
-                        PLANT_ID: item.PLANT_ID,
-                        plantName: item.plantName,
+                        PU_ID: item.PU_ID,
+                        PLANTNAME: item.PLANTNAME,
                         nodes: []
                     };
                     oState.nodes.push(oPlant);
                 }
         
-                // Branch level
+                if (!item.B_ID || !item.B_NAME) return;
+        
                 let oBranch = oPlant.nodes.find(b => b.B_ID === item.B_ID);
                 if (!oBranch) {
                     oBranch = {
                         B_ID: item.B_ID,
-                        B_Name: item.B_Name,
+                        B_NAME: item.B_NAME,
                         nodes: []
                     };
                     oPlant.nodes.push(oBranch);
                 }
         
-                // Material level
-                if (item.m_id && item.m_name) {
+                if (item.M_ID && item.M_NAME) {
                     oBranch.nodes.push({
-                        m_id: item.m_id,
-                        m_name: item.m_name
+                        M_ID: item.M_ID,
+                        M_NAME: item.M_NAME
                     });
                 }
             });
         
-            return Object.values(oCountryMap); // Cleaned hierarchical structure
+            return Object.values(oCountryMap);
+        },
+        
+        
+    //     onSubmitBranchVal: function () {
+    //         const oVBox = sap.ui.getCore().byId("myVBox");
+    //         if (!oVBox) {
+    //             console.error("VBox not found!");
+    //             return;
+    //         }
+        
+    //         const aSelectedBranches = []; // Array to store selected branches
+    //         const oBranchIdSet = new Set(); // Set to avoid duplicate branches
+        
+    //         // Traverse Country > State > Plant > Branch Panels
+    //         oVBox.getItems().forEach(oCountryPanel => {
+    //             oCountryPanel.getContent().forEach(oStateVBox => {
+    //                 oStateVBox.getItems().forEach(oStatePanel => {
+    //                     oStatePanel.getContent().forEach(oPlantVBox => {
+    //                         oPlantVBox.getItems().forEach(oPlantPanel => {
+    //                             oPlantPanel.getContent().forEach(oBranchVBox => {
+    //                                 oBranchVBox.getItems().forEach(oBranchPanel => {
+    //                                     const branchId = oBranchPanel.data("branchId");
+    //                                     const branchName = oBranchPanel.getHeaderText();
+    //                                     let materialSelected = false;
+        
+    //                                     oBranchPanel.getContent().forEach(oMaterialVBox => {
+    //                                         oMaterialVBox.getItems().forEach(oCheckbox => {
+    //                                             if (oCheckbox.getSelected()) {
+    //                                                 materialSelected = true;
+    //                                             }
+    //                                         });
+    //                                     });
+        
+    //                                     // If any material is selected under the branch, add the branch
+    //                                     if (materialSelected && !oBranchIdSet.has(branchId)) {
+    //                                         aSelectedBranches.push({
+    //                                             B_ID: branchId,
+    //                                             B_Name: branchName
+    //                                         });
+    //                                         oBranchIdSet.add(branchId);
+    //                                     }
+    //                                 });
+    //                             });
+    //                         });
+    //                     });
+    //                 });
+    //             });
+    //         });
+        
+    //         if (aSelectedBranches.length === 0) {
+    //             MessageToast.show("Please select at least one material.");
+    //             return;
+    //         }
+        
+    //         // Bind selected branches to the table in another fragment
+    //         const oBranchTable = sap.ui.getCore().byId("branchTable"); // Make sure 'branchTable' is the ID inside the fragment
+    //         if (oBranchTable) {
+    //             const oExistingModel = oBranchTable.getModel("selectedBranchModel");
+    //             let aExistingBranches = oExistingModel ? oExistingModel.getData() : [];
+        
+    //             // Add only new branches to avoid duplicates
+    //             aSelectedBranches.forEach(oNewBranch => {
+    //                 const exists = aExistingBranches.some(
+    //                     oExisting => oExisting.B_ID === oNewBranch.B_ID
+    //                 );
+    //                 if (!exists) {
+    //                     aExistingBranches.push(oNewBranch);
+    //                 }
+    //             });
+    //               // Log to console
+    // console.log("Selected Branch Data:", JSON.stringify(aExistingBranches, null, 2));
+    //             const oModel = new sap.ui.model.json.JSONModel(aExistingBranches);
+    //             oBranchTable.setModel(oModel, "selectedBranchModel");
+               
+    //         }
+        
+    //         // Close the material selection dialog
+    //         if (this.oFragment) {
+    //             this.oFragment.close();
+    //         }
+            
+    //     }
+        
+    onSubmitBranchVal: function () {
+        const oVBox = sap.ui.getCore().byId("myVBox");
+        if (!oVBox) {
+            console.error("VBox not found!");
+            return;
         }
+    
+        const aSelectedBranches = [];
+        const oBranchMaterialSet = new Set(); // To avoid duplicate (B_ID + M_ID)
+    
+        oVBox.getItems().forEach(oCountryPanel => {
+            const cId = oCountryPanel.data("c_id");
+            const cName = oCountryPanel.getHeaderText();
+    
+            oCountryPanel.getContent().forEach(oStateVBox => {
+                oStateVBox.getItems().forEach(oStatePanel => {
+                    const sId = oStatePanel.data("s_id");
+                    const sName = oStatePanel.getHeaderText();
+    
+                    oStatePanel.getContent().forEach(oPlantVBox => {
+                        oPlantVBox.getItems().forEach(oPlantPanel => {
+                            const puId = oPlantPanel.data("pu_id");
+                            const plantName = oPlantPanel.getHeaderText();
+    
+                            oPlantPanel.getContent().forEach(oBranchVBox => {
+                                oBranchVBox.getItems().forEach(oBranchPanel => {
+                                    const bId = oBranchPanel.data("branchId");
+                                    const bName = oBranchPanel.getHeaderText();
+    
+                                    oBranchPanel.getContent().forEach(oMaterialVBox => {
+                                        oMaterialVBox.getItems().forEach(oCheckbox => {
+                                            if (oCheckbox.getSelected()) {
+                                                const mId = oCheckbox.data("m_id");
+                                                const mName = oCheckbox.getText();
+                                                const uniqueKey = `${bId}_${mId}`;
+    
+                                                if (!oBranchMaterialSet.has(uniqueKey)) {
+                                                    aSelectedBranches.push({
+                                                        C_ID: cId,
+                                                        C_NAME: cName,
+                                                        S_ID: sId,
+                                                        S_NAME: sName,
+                                                        PU_ID: puId,
+                                                        PLANTNAME: plantName,
+                                                        B_ID: bId,
+                                                        B_NAME: bName,
+                                                        M_ID: mId,
+                                                        M_NAME: mName
+                                                    });
+                                                    oBranchMaterialSet.add(uniqueKey);
+                                                }
+                                            }
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    
+        if (aSelectedBranches.length === 0) {
+            MessageToast.show("Please select at least one material.");
+            return;
+        }
+    
+        const oBranchTable = sap.ui.getCore().byId("branchTable");
+        if (oBranchTable) {
+            const oExistingModel = oBranchTable.getModel("selectedBranchModel");
+            let aExistingBranches = oExistingModel ? oExistingModel.getData() : [];
+    
+            const aTableBranchIds = aExistingBranches.map(b => b.B_ID);
+    
+            aSelectedBranches.forEach(oNewBranch => {
+                const bId = oNewBranch.B_ID;
+                const mId = oNewBranch.M_ID;
+                const mName = oNewBranch.M_NAME;
+                const bName = oNewBranch.B_NAME;
+    
+                const branchAlreadyExists = aTableBranchIds.includes(bId);
+                const materialAlreadyExists = aExistingBranches.some(entry => entry.B_ID === bId && entry.M_ID === mId);
+    
+                if (materialAlreadyExists) {
+                    MessageToast.show(`Material '${mName}' (M_ID: ${mId}) is already added to Branch '${bName}' (B_ID: ${bId}).`);
+                } else if (branchAlreadyExists) {
+                    MessageToast.show(`Material '${mName}' (M_ID: ${mId}) is added to existing Branch '${bName}' (B_ID: ${bId}).`);
+                    // Don't add to table, just notify
+                } else {
+                    // First time this B_ID is being added → show in table
+                    aExistingBranches.push(oNewBranch);
+                }
+            });
+    
+            const oModel = new sap.ui.model.json.JSONModel(aExistingBranches);
+            oBranchTable.setModel(oModel, "selectedBranchModel");
+        }
+    
+        if (this.oFragment) {
+            this.oFragment.close();
+        }
+    },
+
+
+    _saveProductAndCharacteristics: async function () {
+        const oModel = this.getView().getModel("plantV2Model"); // ODataModel v2
+        const oCore = sap.ui.getCore();
+    
+        // Collect input values
+        const oPayload = {
+            plantName: oCore.byId("inputPlantName").getValue(),
+            address: oCore.byId("inputAddress").getValue(),
+            email: oCore.byId("inputEmail").getValue(),
+            contactNum: oCore.byId("inputContactNum").getValue(),
+            areaSize: oCore.byId("inputAreaSize").getValue(),
+            capacity: oCore.byId("inputCapacity").getValue(),
+            monthlyTurnover: oCore.byId("inputTurnover").getValue(),
+            totalEmployees: oCore.byId("inputTotalEmployees").getValue(),
+            plantDescr: oCore.byId("inputPlantDescr").getValue(),
+            salesHead: oCore.byId("inputSalesHead").getValue(),
+            establishedYear: parseInt(oCore.byId("inputEstablishedYear").getValue()),
+            mostSelling: oCore.byId("inputMostSelling").getValue(),
+            lowestSelling: oCore.byId("inputLowestSelling").getValue(),
+            operationalStatus: oCore.byId("switchOperational").getValue().toLowerCase() === "true",
+            state_S_ID: this._getSelectedStateID() // Assuming you implement this method to fetch state ID from selected branch
+        };
+    
+        // 1. Create Plant Entity
+        try {
+            const oResponse = await new Promise((resolve, reject) => {
+                oModel.create("/PLANTS", oPayload, {
+                    success: resolve,
+                    error: reject
+                });
+            });
+    
+            const puId = oResponse.PU_ID; // Auto-generated Plant ID
+    
+            // 2. Save BranchPlant and BranchMaterial
+            this._saveBranchAndMaterials(puId);
+    
+            MessageToast.show("Plant and related data saved successfully!");
+            oCore.byId("createDialog").close();
+    
+        } catch (err) {
+            MessageBox.error("Error saving plant: " + err.message);
+        }
+    },
+    
+    _saveBranchAndMaterials: async function (puId) {
+        const oModel = this.getView().getModel("mainService");
+        const oTable = sap.ui.getCore().byId("branchTable");
+        const aBranchData = oTable.getModel("selectedBranchModel").getData();
+    
+        const aBranchPlantPayloads = new Set();
+        const aBranchMaterialPayloads = [];
+    
+        for (const oBranch of aBranchData) {
+            // Step 2.1: Save to BRANCHPLANT
+            const branchKey = `${oBranch.B_ID}_${puId}`;
+            if (!aBranchPlantPayloads.has(branchKey)) {
+                aBranchPlantPayloads.add(branchKey);
+                try {
+                    await new Promise((resolve, reject) => {
+                        oModel.create("/BRANCHPLANT", {
+                            "branch_B_ID": oBranch.B_ID,
+                            "plant_PU_ID": puId
+                        }, {
+                            success: resolve,
+                            error: reject
+                        });
+                    });
+                } catch (err) {
+                    console.error("Failed to create BRANCHPLANT:", err);
+                }
+            }
+    
+            // Step 2.2: Save to BRANCHMATERIAL (after checking for duplicates)
+            const bId = oBranch.B_ID;
+            const mId = oBranch.M_ID;
+    
+            const exists = await new Promise((resolve) => {
+                oModel.read(`/BRANCHMATERIAL(branch_B_ID='${bId}',material_M_ID='${mId}')`, {
+                    success: () => resolve(true),
+                    error: () => resolve(false)
+                });
+            });
+    
+            if (!exists) {
+                try {
+                    await new Promise((resolve, reject) => {
+                        oModel.create("/BRANCHMATERIAL", {
+                            "branch_B_ID": bId,
+                            "material_M_ID": mId
+                        }, {
+                            success: resolve,
+                            error: reject
+                        });
+                    });
+                } catch (err) {
+                    console.error("Failed to create BRANCHMATERIAL:", err);
+                }
+            } else {
+                MessageToast.show(`Material '${oBranch.M_NAME}' already exists for Branch '${oBranch.B_NAME}'`);
+            }
+        }
+    },
+    _getSelectedStateID: function () {
+        const oBranchTable = sap.ui.getCore().byId("branchTable");
+        const aData = oBranchTable.getModel("selectedBranchModel").getData();
+        return aData.length > 0 ? aData[0].S_ID : null;
+    }
+    
+    
+        
         
         
     });

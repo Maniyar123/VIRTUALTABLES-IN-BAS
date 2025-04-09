@@ -15,7 +15,7 @@
         </HBox>
 
         <!-- Table for Branch data -->
-        <Table id="branchTable" inset="false"  items="{/CHARACTERISTICS_DATA}" >
+        <Table id="branchTable" inset="false"  items="{selectedBranchModel>/}">
             <columns>
                 <!-- Branch Id Column -->
                 <Column>
@@ -32,10 +32,10 @@
                 <ColumnListItem>
                     <cells>
                        <!-- Bind the Branch Id -->
-                        <Text text="{B_ID}" />
+                        <Text text="{selectedBranchModel>B_ID}" />
 
                         <!-- Bind the Brach name (show the first selected value in this example) -->
-                        <Text text="{B_Name}"/>
+                        <Text text="{selectedBranchModel>B_NAME}"/>
                     </cells>
                 </ColumnListItem>
             </items>
