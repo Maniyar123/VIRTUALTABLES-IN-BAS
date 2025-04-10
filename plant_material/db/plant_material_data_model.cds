@@ -112,9 +112,9 @@ entity PLANTCALVIEW{
 @cds.persistence.exists
 @cds.persistence.table
 entity BRANCHMATERIALCALVIEW{
-  B_ID:String;
+  key B_ID:String;
   B_NAME:String;
-  key M_ID:String;
+ key M_ID:String;
   M_NAME:String;
   M_DESC:String;
   SELLINGPOINT:String;

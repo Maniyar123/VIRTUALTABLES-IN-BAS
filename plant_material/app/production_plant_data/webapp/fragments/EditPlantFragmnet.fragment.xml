@@ -1,0 +1,63 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="updateDialog" title="Update Plant" draggable="true" resizable="true" 
+        contentHeight="720px" 
+        contentWidth="600px">
+        <VBox class="sapUiSmallMargin" renderType="Bare">
+
+            <Label text="Plant Id" design="Bold"/>
+            <Input id="inputUpdatePlantId"  />
+
+            <Label text="Plant Name" design="Bold"/>
+            <Input id="inputUpdatePlantName"  />
+
+            <Label text="Address" design="Bold"/>
+            <Input id="inputUpdateAddress"  />
+
+            <Label text="Email" design="Bold"/>
+            <Input id="inputUpdateEmail"  />
+
+            <Label text="Contact Number" design="Bold"/>
+            <Input id="inputUpdateContactNum" />
+
+            <!-- <Label text="State ID"/>
+            <Input id="inputStateID" placeholder="State ID" /> -->
+
+            <Label text="Area Size" design="Bold"/>
+            <Input id="inputUpdateAreaSize"  />
+
+            <Label text="Capacity" design="Bold"/>
+            <Input id="inputUpdateCapacity" />
+
+            <Label text="Monthly Turnover" design="Bold"/>
+            <Input id="inputUpdateTurnover"  />
+
+            <Label text="Total Employees" design="Bold"/>
+            <Input id="inputUpdateTotalEmployees" />
+
+            <Label text="Plant Description" design="Bold"/>
+            <Input id="inputUpdatePlantDescr"  />
+
+            <Label text="Sales Head" design="Bold"/>
+            <Input id="inputUpdateSalesHead"  />
+
+            <Label text="Established Year" design="Bold"/>
+            <Input id="inputUpdateEstablishedYear"  />
+
+            <Label text="Most Selling Product" design="Bold"/>
+            <Input id="inputUpdateMostSelling" />
+
+            <Label text="Lowest Selling Product" design="Bold"/>
+            <Input id="inputUpdateLowestSelling" />
+
+            <Label text="Operational Status" design="Bold"  />
+            <Input id="switchUpdateOperational"  placeholder="Give The Value Ture/False"/>
+        </VBox>
+
+        <beginButton>
+            <Button text="Update" press="onUpdateButtonPress" id="UpdateButton"/>
+        </beginButton>
+        <endButton>
+            <Button text="Cancel" press=".onCancelCreateDialog" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

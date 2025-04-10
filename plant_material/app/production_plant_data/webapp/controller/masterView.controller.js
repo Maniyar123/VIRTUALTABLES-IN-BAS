@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/Fragment",
-    "sap/m/MessageToast"
-], (Controller,JSONModel,Fragment,MessageToast) => {
+    "sap/m/MessageToast",
+    "sap/m/MessageBox"
+], (Controller,JSONModel,Fragment,MessageToast,MessageBox) => {
     "use strict";
 
     return Controller.extend("com.productionplantdata.controller.masterView", {
@@ -970,116 +971,336 @@ sap.ui.define([
     },
 
 
-    _saveProductAndCharacteristics: async function () {
-        const oModel = this.getView().getModel("plantV2Model"); // ODataModel v2
-        const oCore = sap.ui.getCore();
-    
-        // Collect input values
-        const oPayload = {
-            plantName: oCore.byId("inputPlantName").getValue(),
-            address: oCore.byId("inputAddress").getValue(),
-            email: oCore.byId("inputEmail").getValue(),
-            contactNum: oCore.byId("inputContactNum").getValue(),
-            areaSize: oCore.byId("inputAreaSize").getValue(),
-            capacity: oCore.byId("inputCapacity").getValue(),
-            monthlyTurnover: oCore.byId("inputTurnover").getValue(),
-            totalEmployees: oCore.byId("inputTotalEmployees").getValue(),
-            plantDescr: oCore.byId("inputPlantDescr").getValue(),
-            salesHead: oCore.byId("inputSalesHead").getValue(),
-            establishedYear: parseInt(oCore.byId("inputEstablishedYear").getValue()),
-            mostSelling: oCore.byId("inputMostSelling").getValue(),
-            lowestSelling: oCore.byId("inputLowestSelling").getValue(),
-            operationalStatus: oCore.byId("switchOperational").getValue().toLowerCase() === "true",
-            state_S_ID: this._getSelectedStateID() // Assuming you implement this method to fetch state ID from selected branch
-        };
-    
-        // 1. Create Plant Entity
-        try {
-            const oResponse = await new Promise((resolve, reject) => {
-                oModel.create("/PLANTS", oPayload, {
-                    success: resolve,
-                    error: reject
-                });
-            });
-    
-            const puId = oResponse.PU_ID; // Auto-generated Plant ID
-    
-            // 2. Save BranchPlant and BranchMaterial
-            this._saveBranchAndMaterials(puId);
-    
-            MessageToast.show("Plant and related data saved successfully!");
-            oCore.byId("createDialog").close();
-    
-        } catch (err) {
-            MessageBox.error("Error saving plant: " + err.message);
-        }
-    },
-    
-    _saveBranchAndMaterials: async function (puId) {
-        const oModel = this.getView().getModel("mainService");
-        const oTable = sap.ui.getCore().byId("branchTable");
-        const aBranchData = oTable.getModel("selectedBranchModel").getData();
-    
-        const aBranchPlantPayloads = new Set();
-        const aBranchMaterialPayloads = [];
-    
-        for (const oBranch of aBranchData) {
-            // Step 2.1: Save to BRANCHPLANT
-            const branchKey = `${oBranch.B_ID}_${puId}`;
-            if (!aBranchPlantPayloads.has(branchKey)) {
-                aBranchPlantPayloads.add(branchKey);
-                try {
-                    await new Promise((resolve, reject) => {
-                        oModel.create("/BRANCHPLANT", {
-                            "branch_B_ID": oBranch.B_ID,
-                            "plant_PU_ID": puId
-                        }, {
-                            success: resolve,
-                            error: reject
-                        });
-                    });
-                } catch (err) {
-                    console.error("Failed to create BRANCHPLANT:", err);
-                }
-            }
-    
-            // Step 2.2: Save to BRANCHMATERIAL (after checking for duplicates)
-            const bId = oBranch.B_ID;
-            const mId = oBranch.M_ID;
-    
-            const exists = await new Promise((resolve) => {
-                oModel.read(`/BRANCHMATERIAL(branch_B_ID='${bId}',material_M_ID='${mId}')`, {
-                    success: () => resolve(true),
-                    error: () => resolve(false)
-                });
-            });
-    
-            if (!exists) {
-                try {
-                    await new Promise((resolve, reject) => {
-                        oModel.create("/BRANCHMATERIAL", {
-                            "branch_B_ID": bId,
-                            "material_M_ID": mId
-                        }, {
-                            success: resolve,
-                            error: reject
-                        });
-                    });
-                } catch (err) {
-                    console.error("Failed to create BRANCHMATERIAL:", err);
-                }
-            } else {
-                MessageToast.show(`Material '${oBranch.M_NAME}' already exists for Branch '${oBranch.B_NAME}'`);
-            }
-        }
-    },
-    _getSelectedStateID: function () {
-        const oBranchTable = sap.ui.getCore().byId("branchTable");
-        const aData = oBranchTable.getModel("selectedBranchModel").getData();
-        return aData.length > 0 ? aData[0].S_ID : null;
+
+    _saveProductAndCharacteristics: function () {
+    // Step 1: Get input values from the dialog fragment
+    const plantName = sap.ui.core.Fragment.byId("createDialog", "inputPlantName").getValue();
+    const address = sap.ui.core.Fragment.byId("createDialog", "inputAddress").getValue();
+    const email = sap.ui.core.Fragment.byId("createDialog", "inputEmail").getValue();
+    const contactNum = sap.ui.core.Fragment.byId("createDialog", "inputContactNum").getValue();
+    const areaSize = sap.ui.core.Fragment.byId("createDialog", "inputAreaSize").getValue();
+    const capacity = sap.ui.core.Fragment.byId("createDialog", "inputCapacity").getValue();
+    const monthlyTurnover = sap.ui.core.Fragment.byId("createDialog", "inputTurnover").getValue();
+    const totalEmployees = sap.ui.core.Fragment.byId("createDialog", "inputTotalEmployees").getValue();
+    const plantDescr = sap.ui.core.Fragment.byId("createDialog", "inputPlantDescr").getValue();
+    const salesHead = sap.ui.core.Fragment.byId("createDialog", "inputSalesHead").getValue();
+    const establishedYear = parseInt(sap.ui.core.Fragment.byId("createDialog", "inputEstablishedYear").getValue());
+    const mostSelling = sap.ui.core.Fragment.byId("createDialog", "inputMostSelling").getValue();
+    const lowestSelling = sap.ui.core.Fragment.byId("createDialog", "inputLowestSelling").getValue();
+    const operationalStatus = sap.ui.core.Fragment.byId("createDialog", "switchOperational").getValue();
+
+    // const oBranchTable = sap.ui.core.Fragment.byId("createDialog", "branchTable");
+    const oBranchTable = sap.ui.getCore().byId("branchTable")
+    const aSelectedBranches = oBranchTable.getModel("selectedBranchModel").getData();
+
+    if (!aSelectedBranches || aSelectedBranches.length === 0) {
+        sap.m.MessageToast.show("Please select at least one branch.");
+        return;
     }
+
+    const state_S_ID = aSelectedBranches[0].S_ID; // Assuming all branches are from the same state
+
+    const oModel = this.getView().getModel("plantV2Model");
+
+    // Step 2: Read existing PLANTS and get max PU_ID
+    oModel.read("/PLANTS", {
+        success: function (oData) {
+            let maxPU_ID = 100;
+            oData.results.forEach(function (plant) {
+                const puid = parseInt(plant.PU_ID, 10);
+                if (puid > maxPU_ID) {
+                    maxPU_ID = puid;
+                }
+            });
+
+            const newPU_ID = maxPU_ID + 1;
+
+            // Step 3: Prepare new plant data
+            const newPlant = {
+                PU_ID: newPU_ID,
+                plantName: plantName,
+                address: address,
+                email: email,
+                contactNum: contactNum,
+                areaSize: areaSize,
+                capacity: capacity,
+                monthlyTurnover: monthlyTurnover,
+                totalEmployees: totalEmployees,
+                plantDescr: plantDescr,
+                salesHead: salesHead,
+                establishedYear: establishedYear,
+                mostSelling: mostSelling,
+                lowestSelling: lowestSelling,
+                operationalStatus: operationalStatus,
+                state_S_ID: state_S_ID
+            };
+
+            // Step 4: Create PLANT entry
+            oModel.create("/PLANTS", newPlant, {
+                success: function () {
+                    sap.m.MessageToast.show("Plant created successfully.");
+
+                    // Step 5: Create entries in BRANCHPLANT and BRANCHMATERIAL
+                    aSelectedBranches.forEach(function (branch) {
+                        // --- BRANCHPLANT ---
+                        const branchPlant = {
+                            branch_B_ID: branch.B_ID,
+                            plant_PU_ID: newPU_ID
+                        };
+                        oModel.create("/BRANCHPLANT", branchPlant);
+
+                        // // --- BRANCHMATERIAL ---
+                        // const branchFilters = [
+                        //     new sap.ui.model.Filter("branch_B_ID", "EQ", branch.B_ID),
+                        //     new sap.ui.model.Filter("material_M_ID", "EQ", branch.M_ID)
+                        // ];
+
+                        // oModel.read("/BRANCHMATERIAL", {
+                        //     filters: branchFilters,
+                        //     success: function (result) {
+                        //         if (result.results.length === 0) {
+                        //             const newBranchMaterial = {
+                        //                 branch_B_ID: branch.B_ID,
+                        //                 material_M_ID: branch.M_ID
+                        //             };
+                        //             oModel.create("/BRANCHMATERIAL", newBranchMaterial);
+                        //         } else {
+                        //             sap.m.MessageToast.show(`Material ${branch.M_NAME} already exists for Branch ${branch.B_NAME}`);
+                        //         }
+                        //     }
+                        // });
+                    });
+
+                    // Step 6: Close Dialog
+                    sap.ui.core.Fragment.byId("createDialog", "createDialog").close();
+                },
+                error: function (err) {
+                    console.error("Error creating plant:", err);
+                    sap.m.MessageToast.show("Error creating plant.");
+                }
+            });
+        },
+        error: function () {
+            sap.m.MessageToast.show("Error fetching existing plants.");
+        }
+    });
+},
+
+onDeleteProductListView: function (oEvent) {
+    var oButton = oEvent.getSource();
+    var oContext = oButton.getBindingContext("PlantData");
+
+    if (oContext) {
+        var sPU_ID = oContext.getProperty("PU_ID");
+
+        if (!sPU_ID) {
+            sap.m.MessageToast.show("Plant ID not found.");
+            return;
+        }
+
+        this._deletePlantAndRelatedBranches(sPU_ID);
+    } else {
+        sap.m.MessageToast.show("No plant selected for deletion.");
+    }
+},
+
+
+_deletePlantAndRelatedBranches: function (sPU_ID) {
+    var oModel = this.getView().getModel("plantV2Model");
+    var that = this;
+
+    sap.m.MessageBox.confirm("Are you sure you want to delete this plant and its related branch links?", {
+        onClose: function (oAction) {
+            if (oAction === sap.m.MessageBox.Action.OK) {
+
+                // Step 1: Read BRANCHPLANT entries
+                oModel.read("/BRANCHPLANT", {
+                    success: function (oData) {
+                        var aRelatedBranches = oData.results.filter(function (entry) {
+                            return entry.plant_PU_ID === sPU_ID;
+                        });
+
+                        var iDeleted = 0;
+                        var iTotalToDelete = aRelatedBranches.length;
+
+                        // If no related BRANCHPLANT entries, delete PLANT directly
+                        if (iTotalToDelete === 0) {
+                            var sPlantPath = "/PLANTS(" + sPU_ID + ")";
+                            oModel.remove(sPlantPath, {
+                                success: function () {
+                                    sap.m.MessageToast.show("Plant deleted successfully.");
+                                    oModel.refresh(true);
+                                },
+                                error: function () {
+                                    sap.m.MessageToast.show("Failed to delete plant.");
+                                }
+                            });
+                            return;
+                        }
+
+                        // Step 2: Delete all related BRANCHPLANT entries
+                        aRelatedBranches.forEach(function (oEntry) {
+                            var sBranchPath = "/BRANCHPLANT(branch_B_ID='" + oEntry.branch_B_ID + "',plant_PU_ID=" + oEntry.plant_PU_ID + ")";
+                            oModel.remove(sBranchPath, {
+                                success: function () {
+                                    iDeleted++;
+                                    if (iDeleted === iTotalToDelete) {
+                                        // Step 3: Delete the PLANT after all branches are removed
+                                        var sPlantPath = "/PLANTS(" + sPU_ID + ")";
+                                        oModel.remove(sPlantPath, {
+                                            success: function () {
+                                                sap.m.MessageToast.show("Plant and all related branches deleted successfully.");
+                                                oModel.refresh(true);
+                                            },
+                                            error: function () {
+                                                sap.m.MessageToast.show("Plant deleted partially. Could not delete plant record.");
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function () {
+                                    sap.m.MessageToast.show("Error deleting from BRANCHPLANT.");
+                                }
+                            });
+                        });
+                    },
+                    error: function () {
+                        sap.m.MessageToast.show("Error reading BRANCHPLANT data.");
+                    }
+                });
+            }
+        }
+    });
+},
+
+
+
     
-    
+onEditProductListView: function (oEvent) {
+    // var oView = this.getView();
+    // var oModel = oView.getModel("PlantData"); // default OData model
+    var oButton = oEvent.getSource()
+   var oContext =oButton.getBindingContext("PlantData");
+    var sUniqueID = oContext.getProperty("PU_ID");
+   var oModel=this.getView().getModel("plantV2Model");
+    // Read selected product/plant data
+    oModel.read("/PLANTS(" + sUniqueID + ")", {
+        success: function (oData) {
+            if (!this._plantUpdateDialog) {
+                this._plantUpdateDialog = Fragment.load({
+                    id: 'updateDialog',
+                    name: "com.productionplantdata.fragments.EditPlantFragmnet",
+                    controller: this
+                }).then(function (oDialog) {
+                    this._plantUpdateDialog = Promise.resolve(oDialog);
+                    // oView.addDependent(oDialog);
+                    oDialog.open();
+                    this._setPlantDialogData(oDialog, oData); // populate fields
+                    this._bindPlantTableData(sUniqueID); // bind filtered plant data to table
+                }.bind(this));
+            } else {
+                this._plantUpdateDialog.then(function (oDialog) {
+                    this._setPlantDialogData(oDialog, oData);
+                    oDialog.open();
+                    this._bindPlantTableData(sUniqueID);
+                }.bind(this));
+            }
+        }.bind(this),
+        error: function () {
+            MessageToast.show("Error fetching Plant data.");
+        }
+    });
+},
+_setPlantDialogData: function (oDialog, oData) {
+    Fragment.byId("updateDialog", "inputUpdatePlantId").setValue(oData.PU_ID);
+    Fragment.byId("updateDialog", "inputUpdatePlantName").setValue(oData.plantName);
+    Fragment.byId("updateDialog", "inputUpdateAddress").setValue(oData.address);
+    Fragment.byId("updateDialog", "inputUpdateEmail").setValue(oData.email);
+    Fragment.byId("updateDialog", "inputUpdateContactNum").setValue(oData.contactNum);
+    Fragment.byId("updateDialog", "inputUpdateAreaSize").setValue(oData.areaSize);
+    Fragment.byId("updateDialog", "inputUpdateCapacity").setValue(oData.capacity);
+    Fragment.byId("updateDialog", "inputUpdateTurnover").setValue(oData.monthlyTurnover);
+    Fragment.byId("updateDialog", "inputUpdateTotalEmployees").setValue(oData.totalEmployees);
+    Fragment.byId("updateDialog", "inputUpdatePlantDescr").setValue(oData.plantDescr);
+    Fragment.byId("updateDialog", "inputUpdateSalesHead").setValue(oData.salesHead);
+    Fragment.byId("updateDialog", "inputUpdateEstablishedYear").setValue(oData.establishedYear);
+    Fragment.byId("updateDialog", "inputUpdateMostSelling").setValue(oData.mostSelling);
+    Fragment.byId("updateDialog", "inputUpdateLowestSelling").setValue(oData.lowestSelling);
+    Fragment.byId("updateDialog", "switchUpdateOperational").setValue(oData.operationalStatus);
+
+    // Optional: Prevent editing ID
+    Fragment.byId("updateDialog", "inputUpdatePlantId").setEnabled(false);
+    Fragment.byId("updateDialog", "inputUpdatePlantName").setEnabled(false);
+},
+
+onUpdateButtonPress: function () {
+    var oDialog = this._plantUpdateDialog;
+
+    if (!oDialog) {
+        MessageToast.show("Dialog is not available.");
+        return;
+    }
+
+    oDialog.then(function (dialog) {
+        // Retrieve values from fragment inputs
+        var sPlantId = Fragment.byId("updateDialog", "inputUpdatePlantId").getValue();
+        var sPlantName = Fragment.byId("updateDialog", "inputUpdatePlantName").getValue();
+        var sAddress = Fragment.byId("updateDialog", "inputUpdateAddress").getValue();
+        var sEmail = Fragment.byId("updateDialog", "inputUpdateEmail").getValue();
+        var sContact = Fragment.byId("updateDialog", "inputUpdateContactNum").getValue();
+        var sAreaSize = Fragment.byId("updateDialog", "inputUpdateAreaSize").getValue();
+        var sCapacity = Fragment.byId("updateDialog", "inputUpdateCapacity").getValue();
+        var sTurnover = Fragment.byId("updateDialog", "inputUpdateTurnover").getValue();
+        var sEmployees = Fragment.byId("updateDialog", "inputUpdateTotalEmployees").getValue();
+        var sDescr = Fragment.byId("updateDialog", "inputUpdatePlantDescr").getValue();
+        var sSalesHead = Fragment.byId("updateDialog", "inputUpdateSalesHead").getValue();
+        var sEstablished = Fragment.byId("updateDialog", "inputUpdateEstablishedYear").getValue();
+        var sMostSelling = Fragment.byId("updateDialog", "inputUpdateMostSelling").getValue();
+        var sLowestSelling = Fragment.byId("updateDialog", "inputUpdateLowestSelling").getValue();
+        var sOperational = Fragment.byId("updateDialog", "switchUpdateOperational").getValue();
+
+        if (!sPlantId || !sPlantName) {
+            MessageToast.show("Plant ID and Name are required.");
+            return;
+        }
+
+        // Construct updated object
+        var oUpdatedPlant = {
+            PU_ID: parseInt(sPlantId), // if ID is integer
+            plantName: sPlantName,
+            address: sAddress,
+            email: sEmail,
+            contactNum: sContact,
+            areaSize: sAreaSize,
+            capacity: sCapacity,
+            monthlyTurnover: sTurnover,
+            totalEmployees: sEmployees,
+            plantDescr: sDescr,
+            salesHead: sSalesHead,
+            establishedYear: sEstablished,
+            mostSelling: sMostSelling,
+            lowestSelling: sLowestSelling,
+            operationalStatus: sOperational === "true" || sOperational === true
+        };
+
+        var oModel = this.getView().getModel("plantV2Model");
+
+        oModel.update("/PLANTS(" + sPlantId + ")", oUpdatedPlant, {
+            success: function () {
+                MessageToast.show("Plant updated successfully.");
+                oModel.refresh();
+                dialog.close();
+            }.bind(this),
+            error: function (oError) {
+                MessageToast.show("Error updating Plant. Check the console.");
+                console.error("Update error:", oError);
+            }
+        });
+    }.bind(this));
+}
+ 
+
+
         
         
         
