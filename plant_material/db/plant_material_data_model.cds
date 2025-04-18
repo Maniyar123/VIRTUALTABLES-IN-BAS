@@ -44,8 +44,9 @@ entity Branch {
   materials   : Composition of many BranchMaterial on materials.branch = $self;
 }
 entity BranchPlantLink {
-  key branch      : Association to Branch;
-  key plant       : Association to Plant;
+   key branch      : Association to Branch;
+   key plant       : Association to Plant;
+    B_Name     : String ;
 }
 
 
@@ -72,10 +73,11 @@ entity Material {
 }
 
 entity BranchMaterial {
+  key Plant:Association to Plant;
   key branch  : Association to Branch;
   key material: Association to Material;
 }
-}
+ }
 
 
 
@@ -84,7 +86,7 @@ entity BranchMaterial {
 entity BRANCHPLANTCALVIEW{
    key B_ID:String;
    B_NAME:String;
-   PLANT_PU_ID:Integer;
+   key PLANT_PU_ID:Integer;
 }
 @cds.persistence.exists
 @cds.persistence.table
@@ -112,7 +114,7 @@ entity PLANTCALVIEW{
 @cds.persistence.exists
 @cds.persistence.table
 entity BRANCHMATERIALCALVIEW{
-  key B_ID:String;
+  key BRANCH_B_ID:String;
   B_NAME:String;
  key M_ID:String;
   M_NAME:String;
@@ -128,7 +130,7 @@ entity BRANCHMATERIALCALVIEW{
   RECYCLABLE:Boolean;
   USAGE:String;
   SUPPLIER:String;
-  PLANT_PU_ID:Integer;
+  key PLANT_PU_ID:Integer;
   M_PRICE:Decimal(10,2); 
   M_QUANTITY:Integer;
   M_CAPACITY:Decimal(10,2);
@@ -144,8 +146,10 @@ entity BRANCHPANELVIEW{
   S_NAME:String;
   PU_ID:Integer;
   PLANTNAME:String;
-  B_ID:String;
+  // B_ID:String;
   B_NAME:String;
+  BRANCH_B_ID:String;
   key M_ID:String;
   M_NAME:String;
 }
+

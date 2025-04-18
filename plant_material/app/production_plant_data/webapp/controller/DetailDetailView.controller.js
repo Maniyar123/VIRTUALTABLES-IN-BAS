@@ -78,31 +78,70 @@ sap.ui.define([
     //         }.bind(this) // <-- Bind "this" to ensure correct context
     //     });
     // }
+    // getData: function (branchUniqueId, plantUniqueId) {
+    //     var that = this;
+    //     var oPlantModel = this.getOwnerComponent().getModel("plantV2Model");
+    
+    //     oPlantModel.read("/branchmaterialcalview", {
+    //         success: function (oData) {
+    //             // Filter all matching records
+    //             var filteredPlants = oData.results.filter(item => item.BRANCH_B_ID === branchUniqueId && item.PLANT_PU_ID === plantUniqueId);
+                
+    //             if (filteredPlants.length > 0) {
+    //                 var oFilteredPlantModel = new JSONModel({ results: filteredPlants }); // Store as array
+    //                 console.log("Filtered Plant Model Data:", oFilteredPlantModel.getData());
+    
+    //                 // Set model with an array structure
+    //                 this.getView().setModel(oFilteredPlantModel, "PlantDetails");
+    //             } else {
+    //                 console.warn("No plant details found for branch ID:", branchUniqueId, "and plant ID:", plantUniqueId);
+    //             }
+    //         }.bind(this),
+    //         error: function (oError) {
+    //             console.error("Error fetching plant details:", oError);
+    //         }.bind(this)
+    //     });
+    // },
+
     getData: function (branchUniqueId, plantUniqueId) {
         var that = this;
         var oPlantModel = this.getOwnerComponent().getModel("plantV2Model");
     
         oPlantModel.read("/branchmaterialcalview", {
             success: function (oData) {
-                // Filter all matching records
-                var filteredPlants = oData.results.filter(item => item.B_ID === branchUniqueId && item.PLANT_PU_ID === plantUniqueId);
-                
-                if (filteredPlants.length > 0) {
-                    var oFilteredPlantModel = new JSONModel({ results: filteredPlants }); // Store as array
-                    console.log("Filtered Plant Model Data:", oFilteredPlantModel.getData());
+                // Filter all records for matching branch and plant IDs
+                var filteredPlants = oData.results.filter(function (item) {
+                    return item.BRANCH_B_ID === branchUniqueId && item.PLANT_PU_ID === plantUniqueId;
+                });
     
-                    // Set model with an array structure
-                    this.getView().setModel(oFilteredPlantModel, "PlantDetails");
+                // Remove duplicates based on (BRANCH_B_ID, M_ID)
+                var uniqueCombinations = {};
+                var deduplicatedData = filteredPlants.filter(function (item) {
+                    var key = item.BRANCH_B_ID + "_" + item.M_ID;
+                    if (!uniqueCombinations[key]) {
+                        uniqueCombinations[key] = true;
+                        return true;
+                    }
+                    return false;
+                });
+    
+                if (deduplicatedData.length > 0) {
+                    var oFilteredPlantModel = new sap.ui.model.json.JSONModel({ results: deduplicatedData });
+                    console.log("Filtered Deduplicated Data:", oFilteredPlantModel.getData());
+                    that.getView().setModel(oFilteredPlantModel, "PlantDetails");
                 } else {
-                    console.warn("No plant details found for branch ID:", branchUniqueId, "and plant ID:", plantUniqueId);
+                    console.warn("No matching plant data found for Branch:", branchUniqueId, "Plant:", plantUniqueId);
                 }
-            }.bind(this),
+            },
             error: function (oError) {
-                console.error("Error fetching plant details:", oError);
-            }.bind(this)
+                console.error("Error fetching data:", oError);
+            }
         });
     },
-
+    
+    
+    
+    
         // Fetch details when the view is rendered
         onAfterRendering: function () {
             var oGModel = this.getOwnerComponent().getModel("globalModel");

@@ -67,8 +67,6 @@
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1_2" cardinality="C1_N" joinType="inner" multiJoinNode="Join_1" multiJoinCentralTable="CATLOGSERVICE1_COUNTRIES" multiJoinOrder="Outside In">
     <viewAttributes>
-      <viewAttribute id="C_ID"/>
-      <viewAttribute id="C_NAME"/>
       <viewAttribute id="S_ID"/>
       <viewAttribute id="S_NAME"/>
       <viewAttribute id="PU_ID" aggregationType="sum"/>
@@ -86,6 +84,9 @@
       <viewAttribute id="ADDRESS"/>
       <viewAttribute id="OPERATIONALSTATUS"/>
       <viewAttribute id="EMAIL"/>
+      <viewAttribute id="COUNTY_C_ID"/>
+      <viewAttribute id="C_ID"/>
+      <viewAttribute id="C_NAME"/>
       <viewAttribute hidden="true" id="JOIN$C_ID$COUNTY_C_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -112,6 +113,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="ADDRESS" source="ADDRESS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="OPERATIONALSTATUS" source="OPERATIONALSTATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="EMAIL" source="EMAIL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTY_C_ID" source="COUNTY_C_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$C_ID$COUNTY_C_ID" source="COUNTY_C_ID"/>
     </input>
     <joinAttribute name="JOIN$C_ID$COUNTY_C_ID"/>
@@ -223,15 +225,15 @@
     </shape>
     <shape modelObjectName="CATLOGSERVICE1_COUNTRIES" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="250.251953125"/>
+      <rectangleSize width="250"/>
     </shape>
     <shape modelObjectName="CATLOGSERVICE1_STATES" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="225.138671875"/>
+      <rectangleSize width="225"/>
     </shape>
     <shape modelObjectName="CATLOGSERVICE1_PLANTS" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput" multiJoinViewNodeName="Join_1">
       <upperLeftCorner x="620" y="30"/>
-      <rectangleSize width="227.58203125"/>
+      <rectangleSize width="227"/>
     </shape>
   </shapes>
 </layout>

@@ -13,7 +13,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_N" joinType="inner">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_N" joinType="fullOuter">
     <viewAttributes>
       <viewAttribute id="C_ID"/>
       <viewAttribute id="C_NAME"/>
@@ -21,10 +21,10 @@
       <viewAttribute id="S_NAME"/>
       <viewAttribute id="PU_ID"/>
       <viewAttribute id="PLANTNAME"/>
-      <viewAttribute id="B_ID"/>
-      <viewAttribute id="B_NAME"/>
       <viewAttribute id="M_ID"/>
       <viewAttribute id="M_NAME"/>
+      <viewAttribute id="BRANCH_B_ID"/>
+      <viewAttribute id="B_NAME"/>
       <viewAttribute hidden="true" id="JOIN$PU_ID$PLANT_PU_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -38,10 +38,10 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PU_ID$PLANT_PU_ID" source="PU_ID"/>
     </input>
     <input node="BRANCHMATERIALCALVIEW">
-      <mapping xsi:type="Calculation:AttributeMapping" target="B_ID" source="B_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="B_NAME" source="B_NAME"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="M_ID" source="M_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="M_NAME" source="M_NAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="BRANCH_B_ID" source="BRANCH_B_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="B_NAME" source="B_NAME"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PU_ID$PLANT_PU_ID" source="PLANT_PU_ID"/>
     </input>
     <joinAttribute name="JOIN$PU_ID$PLANT_PU_ID"/>
@@ -74,21 +74,24 @@
       <descriptions defaultDescription="PLANTNAME"/>
       <keyMapping columnObjectName="Join_1" columnName="PLANTNAME"/>
     </attribute>
-    <attribute id="B_ID" order="7" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="B_ID"/>
-      <keyMapping columnObjectName="Join_1" columnName="B_ID"/>
-    </attribute>
-    <attribute id="B_NAME" order="8" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="B_NAME"/>
-      <keyMapping columnObjectName="Join_1" columnName="B_NAME"/>
-    </attribute>
-    <attribute id="M_ID" order="9" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="M_ID" order="7" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="M_ID"/>
       <keyMapping columnObjectName="Join_1" columnName="M_ID"/>
     </attribute>
-    <attribute id="M_NAME" order="10" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="M_NAME" order="8" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="M_NAME"/>
       <keyMapping columnObjectName="Join_1" columnName="M_NAME"/>
+    </attribute>
+    <attribute id="BRANCH_B_ID" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BRANCH_B_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="BRANCH_B_ID"/>
+    </attribute>
+  
+    <attribute id="B_NAME" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="B_NAME"/>
+  
+      <keyMapping columnObjectName="Join_1" columnName="B_NAME"/>
+  
     </attribute>
   </attributes>
   <calculatedAttributes/>
@@ -109,11 +112,11 @@
     </shape>
     <shape modelObjectName="PLANTCALVIEW" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="205.1845703125"/>
+      <rectangleSize width="205"/>
     </shape>
     <shape modelObjectName="BRANCHMATERIALCALVIEW" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="231.537109375"/>
+      <rectangleSize width="231"/>
     </shape>
   </shapes>
 </layout>

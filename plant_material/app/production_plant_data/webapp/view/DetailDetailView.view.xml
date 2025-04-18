@@ -31,7 +31,7 @@
                                 </f:layout>
                                 <f:FormContainer>
                                  <f:FormElement label="Branch ID">
-                                        <f:fields><Text text="{PlantDetails>B_ID}" /></f:fields>
+                                        <f:fields><Text text="{PlantDetails>BRANCH_B_ID}" /></f:fields>
                                     </f:FormElement>
                                     <f:FormElement label="Branch Name">
                                         <f:fields><Text text="{PlantDetails>B_NAME}" /></f:fields>

@@ -1,0 +1,18 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+ <Dialog
+        id="updatePanelDialog"
+        title="Branch Selection Panel"
+        afterOpen="onBeforeOpen"
+        draggable="true">
+        <VBox id="myUpdateVBox" class="sapUiSmallMargin">
+            <!-- Panels will be dynamically added here -->
+        </VBox>
+        <buttons>
+        <Button  text="Submit" press="onSubmitBranchValUpdate"></Button>
+            <Button
+                text="Close"
+                press="onCloseBranchUpdatePanelDialog"/>
+
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

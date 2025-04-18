@@ -90,7 +90,9 @@
                             <!-- Update and Delete Icons -->
                             <HBox justifyContent="Center" alignItems="Center">
                                  <Button icon="sap-icon://edit" press="onEditProductListView" type="Success" class="sapUiTinyMarginEnd" />
-                                 <Button icon="sap-icon://delete" press="onDeleteProductListView" type="Reject"  />
+                                 <Button icon="sap-icon://delete" press="onDeleteProductListView" type="Reject" class="sapUiTinyMarginEnd"  />
+                                <Button icon="sap-icon://document-text" tooltip="Download Invoice" press="onDownloadInvoiceFromRow" />
+
                             </HBox>
                         </cells>
                     </ColumnListItem>

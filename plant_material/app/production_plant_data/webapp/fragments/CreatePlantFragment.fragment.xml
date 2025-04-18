@@ -56,7 +56,7 @@
             <Button icon="sap-icon://add" text="Add Branches" press="onButtonPress" id="addBranchesButton"/>
         </beginButton>
         <endButton>
-            <Button text="Cancel" press=".onCancelCreateDialog" />
+            <Button text="Cancel" press="onCancelCreateDialog" />
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

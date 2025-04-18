@@ -32,7 +32,7 @@
                 <ColumnListItem>
                     <cells>
                        <!-- Bind the Branch Id -->
-                        <Text text="{selectedBranchModel>B_ID}" />
+                        <Text text="{selectedBranchModel>BRANCH_B_ID}" />
 
                         <!-- Bind the Brach name (show the first selected value in this example) -->
                         <Text text="{selectedBranchModel>B_NAME}"/>

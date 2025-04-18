@@ -51,13 +51,47 @@
 
             <Label text="Operational Status" design="Bold"  />
             <Input id="switchUpdateOperational"  placeholder="Give The Value Ture/False"/>
+
         </VBox>
+             <!-- Placeholder for the additional fragment with the table -->
+            <VBox id="editBranchFormVBox" class="sapUiSmallMargin">
+                
+                <!-- Use HBox for placing button to the right -->
+                <HBox justifyContent="End" class="sapUiSmallMarginBottom">
+                    <Button 
+                        icon="sap-icon://add" 
+                        press="onEditAddBranchUpdate" />
+                </HBox>
+
+                <!-- Table for displaying characteristics data -->
+                <Table id="branchEditTable" items="{/BRANCH_DATA}">
+                    <columns>
+                        <Column>
+                            <Text text="BranchId"/>
+                        </Column>
+                        <Column>
+                            <Text text="Branch Name"/>
+                        </Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Text text="{BRANCH_B_ID}"/>
+                                <Text text="{B_NAME}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+
+        
 
         <beginButton>
             <Button text="Update" press="onUpdateButtonPress" id="UpdateButton"/>
         </beginButton>
         <endButton>
-            <Button text="Cancel" press=".onCancelCreateDialog" />
+            <Button text="Cancel" press="onCancelUpdateDialog" />
         </endButton>
     </Dialog>
 </core:FragmentDefinition>
